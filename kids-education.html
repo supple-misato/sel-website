@@ -106,6 +106,20 @@
     footer { background: var(--text); color: rgba(255,255,255,0.6); text-align: center; padding: 32px 24px; font-size: 11px; line-height: 2; }
     footer strong { color: white; font-size: 13px; }
 
+
+    /* キャラクター・画像セクション */
+    .characters { background: var(--pink-pale); }
+    .char-section-title { font-size: 18px; font-weight: 900; color: var(--text); margin-bottom: 16px; text-align: center; }
+    .char-images { display: flex; flex-direction: column; gap: 16px; margin-bottom: 28px; }
+    .char-img-wrap { border-radius: 20px; overflow: hidden; box-shadow: 0 4px 24px rgba(45,134,83,0.12); }
+    .char-img-wrap img { width: 100%; height: auto; display: block; }
+    .char-img-caption { font-size: 12px; color: var(--text-light); text-align: center; padding: 8px 0 0; }
+    .game-images { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .game-img-wrap { border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(45,134,83,0.10); }
+    .game-img-wrap img { width: 100%; height: auto; display: block; }
+    .ehon-wrap { border-radius: 20px; overflow: hidden; box-shadow: 0 8px 32px rgba(45,134,83,0.15); max-width: 280px; margin: 0 auto; }
+    .ehon-wrap img { width: 100%; height: auto; display: block; }
+
     /* アニメーション */
     .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
@@ -127,6 +141,14 @@
   <h1>子どもたちに、<br><span>お金と社会の仕組みを。</span></h1>
   <p class="hero-sub">「ありがとうの対価がお金になる」<br>楽しく学べる金融教育プログラム</p>
 </section>
+
+<!-- 4色のサンク画像 -->
+<div style="background: linear-gradient(160deg, #e8f5ee 0%, #f7fbf3 60%, #fff0f3 100%); padding: 0 24px 48px;">
+  <div class="char-img-wrap">
+    <img src="images/sank-characters.png" alt="4色のサンクたち" loading="lazy" style="width:100%;height:auto;display:block;border-radius:20px;" />
+  </div>
+  <p class="char-img-caption" style="padding-top:10px;">🌿 4色のサンクが子どもたちをサポート</p>
+</div>
 
 <!-- 社会的背景 -->
 <section class="background fade-in">
@@ -169,7 +191,7 @@
   <p class="section-tag">Concept</p>
   <h2 class="section-title">Thank youゲームとは</h2>
   <div class="concept-main">
-    <div class="concept-icon">🃏</div>
+    <div class="concept-icon">☘️</div>
     <h3 class="concept-title">「誰かの役に立つことで<br>対価が得られる」<br>を楽しく学ぶカードゲーム</h3>
     <p class="concept-desc">お金＝ありがとうの交換という感覚を、カードゲームを通じて体感。「誰かの役に立つとは？」という基本的なお金の生まれる仕組みを学びます。カードには小学校低学年でもわかりやすいイラストがあるので、直感的にお金と社会の仕組みについて体験できます。</p>
   </div>
@@ -197,6 +219,14 @@
     </div>
   </div>
 </section>
+
+<!-- 授業シーン画像 -->
+<div style="padding: 0 24px 40px; background: var(--green-pale);">
+  <div class="char-img-wrap">
+    <img src="images/game-scene.png" alt="2色のサンクがゲームしている様子" loading="lazy" style="width:100%;height:auto;display:block;border-radius:20px;" />
+  </div>
+  <p class="char-img-caption" style="padding-top:10px;">🌿 2色のサンクがいっしょにゲームを楽しんでいます</p>
+</div>
 
 <!-- Thank youゲームのルール -->
 <section class="curriculum fade-in">
@@ -232,6 +262,15 @@
   </div>
 </section>
 
+
+<!-- ルール後の画像 -->
+<div style="padding: 0 24px 40px; background: white;">
+  <div class="char-img-wrap">
+    <img src="images/bank-card.png" alt="バンクがコインカードを封筒に入れている様子" loading="lazy" style="width:100%;height:auto;display:block;border-radius:20px;" />
+  </div>
+  <p class="char-img-caption" style="padding-top:10px;">🦝 バンクがコインカードを封筒に入れてくれます</p>
+</div>
+
 <!-- ゲーム後の楽しみ -->
 <section class="curriculum fade-in">
   <p class="section-tag">After Game</p>
@@ -256,6 +295,17 @@
     </div>
   </div>
 </section>
+
+
+<!-- 絵本画像 -->
+<div style="padding: 0 24px 40px; background: white;">
+  <h3 class="char-section-title" style="margin-bottom:16px;">📚 セットの絵本</h3>
+  <p style="font-size:13px;color:var(--text-light);text-align:center;margin-bottom:16px;line-height:1.9;">ゲームのコンセプトをさらに深める絵本もご用意しています。</p>
+  <div class="ehon-wrap">
+    <img src="images/ehon.png" alt="ありがとうとおかねのまほう" loading="lazy" />
+  </div>
+  <p class="char-img-caption" style="margin-top:8px;">「ありがとうとおかねのまほう」Supple Education Labo</p>
+</div>
 
 <!-- こんな方にご活用いただけます -->
 <section class="format fade-in">
