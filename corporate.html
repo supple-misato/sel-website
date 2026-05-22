@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>法人向けサポート・研修 | Supple Education Labo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green: #2d8653;
+      --green-light: #3d9970;
+      --green-pale: #e8f5ee;
+      --pink: #e8829a;
+      --pink-pale: #fff0f3;
+      --text: #1a2e22;
+      --text-light: #5a7a65;
+      --white: #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Noto Sans JP', sans-serif; color: var(--text); background: var(--white); overflow-x: hidden; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(61,153,112,0.15);
+      padding: 14px 24px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-back { display: flex; align-items: center; gap: 6px; color: var(--green); font-size: 13px; font-weight: 700; text-decoration: none; }
+    .nav-logo-text { font-size: 13px; font-weight: 900; color: var(--green); letter-spacing: 0.08em; }
+
+    .hero {
+      min-height: 60vh;
+      background: linear-gradient(160deg, #e8f5ee 0%, #f7fbf3 60%, #fff0f3 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 100px 24px 60px; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero-circle1 { position: absolute; top: -60px; right: -60px; width: 250px; height: 250px; border-radius: 50%; background: radial-gradient(circle, rgba(61,153,112,0.12) 0%, transparent 70%); }
+    .hero-circle2 { position: absolute; bottom: -40px; left: -40px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(232,130,154,0.10) 0%, transparent 70%); }
+    .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: white; border: 1px solid rgba(61,153,112,0.3); border-radius: 50px; padding: 6px 16px; font-size: 11px; color: var(--green); font-weight: 700; letter-spacing: 0.08em; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(61,153,112,0.12); }
+    .hero h1 { font-size: clamp(26px, 7vw, 38px); font-weight: 900; line-height: 1.4; margin-bottom: 12px; }
+    .hero h1 span { color: var(--green); }
+    .hero-sub { font-size: 14px; color: var(--text-light); line-height: 1.9; }
+
+    section { padding: 56px 24px; }
+    .section-tag { font-size: 11px; font-weight: 700; color: var(--green); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
+    .section-title { font-size: clamp(20px, 5vw, 28px); font-weight: 900; line-height: 1.4; margin-bottom: 12px; }
+    .section-desc { font-size: 13px; color: var(--text-light); line-height: 1.9; margin-bottom: 28px; }
+
+    .bg-white { background: white; }
+    .bg-pale { background: var(--green-pale); }
+
+    /* 課題カード */
+    .issue-cards { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+    .issue-card { background: white; border-radius: 14px; padding: 18px 20px; display: flex; align-items: flex-start; gap: 14px; border-left: 4px solid var(--pink); }
+    .issue-icon { font-size: 24px; flex-shrink: 0; }
+    .issue-title { font-size: 14px; font-weight: 900; margin-bottom: 4px; color: var(--text); }
+    .issue-desc { font-size: 12px; color: var(--text-light); line-height: 1.7; }
+
+    /* 解決バナー */
+    .solution-banner { background: linear-gradient(135deg, var(--green), var(--green-light)); border-radius: 16px; padding: 20px 24px; text-align: center; margin-bottom: 24px; }
+    .solution-banner p { color: white; font-size: 15px; font-weight: 900; line-height: 1.6; }
+
+    /* コンセプトポイント */
+    .concept-points { display: flex; flex-direction: column; gap: 12px; }
+    .concept-point { background: white; border-radius: 14px; padding: 18px 20px; display: flex; align-items: flex-start; gap: 14px; }
+    .concept-point-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--green-pale); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .concept-point-title { font-size: 14px; font-weight: 900; margin-bottom: 4px; color: var(--text); }
+    .concept-point-desc { font-size: 12px; color: var(--text-light); line-height: 1.7; }
+
+    /* セミナーメニュー */
+    .seminar-category { margin-bottom: 24px; }
+    .seminar-category-title { font-size: 14px; font-weight: 900; color: var(--green); border-left: 3px solid var(--green); padding-left: 10px; margin-bottom: 12px; }
+    .seminar-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .seminar-tag { background: white; border: 1.5px solid rgba(61,153,112,0.3); color: var(--text); padding: 6px 14px; border-radius: 50px; font-size: 12px; font-weight: 700; }
+    .seminar-tag.dei { border-color: var(--pink); color: var(--pink); }
+
+    /* カスタマイズ */
+    .customize-box { background: #fffbf0; border: 1px dashed #e8c870; border-radius: 14px; padding: 20px; margin-top: 20px; }
+    .customize-box p { font-size: 13px; color: #7a6020; line-height: 1.9; }
+    .customize-box strong { color: #c0830a; }
+
+    /* 退職給付 */
+    .dc-cards { display: flex; flex-direction: column; gap: 12px; }
+    .dc-card { background: var(--green-pale); border-radius: 14px; padding: 18px 20px; border-left: 4px solid var(--green); }
+    .dc-card-title { font-size: 14px; font-weight: 900; margin-bottom: 4px; color: var(--text); }
+    .dc-card-desc { font-size: 12px; color: var(--text-light); line-height: 1.7; }
+
+    /* お問い合わせ */
+    .contact { background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%); text-align: center; color: white; }
+    .contact .section-tag { color: rgba(255,255,255,0.7); }
+    .contact .section-title { color: white; }
+    .contact-desc { font-size: 13px; color: rgba(255,255,255,0.85); line-height: 1.9; margin-bottom: 28px; }
+    .contact-btns { display: flex; flex-direction: column; gap: 12px; max-width: 300px; margin: 0 auto; }
+    .btn-white { background: white; color: var(--green); padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 900; text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+    .btn-outline-white { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.6); padding: 14px; border-radius: 14px; font-size: 15px; font-weight: 700; text-decoration: none; text-align: center; }
+
+    footer { background: var(--text); color: rgba(255,255,255,0.6); text-align: center; padding: 32px 24px; font-size: 11px; line-height: 2; }
+    footer strong { color: white; font-size: 13px; }
+
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-back">← SEL トップへ</a>
+  <span class="nav-logo-text">SEL</span>
+</nav>
+
+<!-- ヒーロー -->
+<section class="hero">
+  <div class="hero-circle1"></div>
+  <div class="hero-circle2"></div>
+  <div class="hero-badge">🏢 For Business</div>
+  <h1>従業員の「お金の不安」を、<br><span>組織の力に変える。</span></h1>
+  <p class="hero-sub">金融教育・DEI研修・退職給付支援まで<br>企業の課題に合わせたトータルサポート</p>
+</section>
+
+<!-- 課題 -->
+<section class="bg-white fade-in">
+  <p class="section-tag">Issues</p>
+  <h2 class="section-title">こんなお悩みは<br>ありませんか？</h2>
+  <div class="issue-cards">
+    <div class="issue-card">
+      <div class="issue-icon">😔</div>
+      <div>
+        <p class="issue-title">お金の不安で仕事に集中できない</p>
+        <p class="issue-desc">老後・住宅・教育費など、お金の悩みを抱えたまま働く従業員が増えています。</p>
+      </div>
+    </div>
+    <div class="issue-card">
+      <div class="issue-icon">👩</div>
+      <div>
+        <p class="issue-title">女性社員の定着率・活躍推進に悩んでいる</p>
+        <p class="issue-desc">ライフイベントに合わせたサポートが不十分で、優秀な女性が離職してしまう。</p>
+      </div>
+    </div>
+    <div class="issue-card">
+      <div class="issue-icon">📋</div>
+      <div>
+        <p class="issue-title">退職給付制度の説明が従業員に伝わっていない</p>
+        <p class="issue-desc">DCの仕組みや商品選択の重要性が理解されず、制度が活用されていない。</p>
+      </div>
+    </div>
+    <div class="issue-card">
+      <div class="issue-icon">🌈</div>
+      <div>
+        <p class="issue-title">DEI推進をどこから始めればいいかわからない</p>
+        <p class="issue-desc">多様性・公平性・包括性への取り組みが求められているが、具体的な施策が見つからない。</p>
+      </div>
+    </div>
+  </div>
+  <div class="solution-banner">
+    <p>Supple Education Laboが<br>まるごとサポートします😊</p>
+  </div>
+</section>
+
+<!-- 強み -->
+<section class="bg-pale fade-in">
+  <p class="section-tag">Our Strength</p>
+  <h2 class="section-title">SELが選ばれる<br>3つの理由</h2>
+  <div class="concept-points">
+    <div class="concept-point">
+      <div class="concept-point-icon">🎓</div>
+      <div>
+        <p class="concept-point-title">FP×女性の健康の専門家が対応</p>
+        <p class="concept-point-desc">FP2級・AFP資格に加え、公益社団法人 女性の健康とメノポーズ協会認定の女性の健康経営推進員として、お金と健康の両面からサポートします。</p>
+      </div>
+    </div>
+    <div class="concept-point">
+      <div class="concept-point-icon">🔧</div>
+      <div>
+        <p class="concept-point-title">企業の課題に合わせたカスタマイズ対応</p>
+        <p class="concept-point-desc">単独のセミナーから複数メニューの組み合わせまで、御社の課題・従業員層・予算に合わせて柔軟にご提案します。</p>
+      </div>
+    </div>
+    <div class="concept-point">
+      <div class="concept-point-icon">💬</div>
+      <div>
+        <p class="concept-point-title">「安心・共感・寄り添い」のスタイル</p>
+        <p class="concept-point-desc">難しい金融知識を押しつけるのではなく、参加者が自分ごととして考えられる場づくりを大切にしています。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- セミナーメニュー -->
+<section class="bg-white fade-in">
+  <p class="section-tag">Menu</p>
+  <h2 class="section-title">セミナー・研修<br>メニュー</h2>
+  <p class="section-desc">目的や対象に合わせて、単独または組み合わせてご提供可能です。</p>
+
+  <div class="seminar-category">
+    <p class="seminar-category-title">💰 お金・資産形成</p>
+    <div class="seminar-tags">
+      <span class="seminar-tag">マネーセミナー</span>
+      <span class="seminar-tag">ライフプランセミナー</span>
+      <span class="seminar-tag">資産形成セミナー</span>
+      <span class="seminar-tag">家計改善セミナー</span>
+      <span class="seminar-tag">貯蓄改善セミナー</span>
+      <span class="seminar-tag">お金の使い方セミナー</span>
+    </div>
+  </div>
+
+  <div class="seminar-category">
+    <p class="seminar-category-title">🌈 DEI・女性活躍推進</p>
+    <div class="seminar-tags">
+      <span class="seminar-tag dei">女性の健康とライフスタイルセミナー</span>
+      <span class="seminar-tag dei">LGBTQアライ基礎セミナー</span>
+    </div>
+  </div>
+
+  <div class="seminar-category">
+    <p class="seminar-category-title">🎓 学生・新社会人向け</p>
+    <div class="seminar-tags">
+      <span class="seminar-tag">FP3級学習前セミナー</span>
+      <span class="seminar-tag">お金の使い方セミナー（新社会人）</span>
+    </div>
+  </div>
+
+  <div class="customize-box">
+    <p>
+      <strong>✨ カスタマイズ対応可能です</strong><br><br>
+      複数のメニューを組み合わせてのご提供も承っています。<br>
+      例）女性の健康とライフスタイル＋家計改善<br>
+      例）お金の使い方＋資産形成<br><br>
+      御社の課題・従業員層に合わせて最適なプログラムをご提案します。まずはお気軽にご相談ください。
+    </p>
+  </div>
+</section>
+
+<!-- 退職給付支援 -->
+<section class="bg-pale fade-in">
+  <p class="section-tag">DC Support</p>
+  <h2 class="section-title">退職給付支援</h2>
+  <p class="section-desc">確定拠出年金（DC）の制度理解から従業員の資産形成サポートまで、専門家としてトータルに支援します。</p>
+  <div class="dc-cards">
+    <div class="dc-card">
+      <p class="dc-card-title">📊 DC商品の選び方セミナー</p>
+      <p class="dc-card-desc">どの商品を選べばいいかわからない従業員に向けて、わかりやすく解説。自分に合った運用方法を学べます。</p>
+    </div>
+    <div class="dc-card">
+      <p class="dc-card-title">📖 退職給付制度の仕組み解説</p>
+      <p class="dc-card-desc">DC・DBの違いから受け取り方まで、従業員が制度を正しく理解できるよう丁寧にサポートします。</p>
+    </div>
+    <div class="dc-card">
+      <p class="dc-card-title">🌱 退職後の生活設計サポート</p>
+      <p class="dc-card-desc">退職金をどう活用するか、老後の生活費をどう準備するか。FPとして個別のライフプランに寄り添います。</p>
+    </div>
+  </div>
+</section>
+
+<!-- こんな企業に -->
+<section class="bg-white fade-in">
+  <p class="section-tag">For You</p>
+  <h2 class="section-title">こんな企業・団体に<br>ご活用いただけます</h2>
+  <div class="concept-points">
+    <div class="concept-point">
+      <div class="concept-point-icon">🏦</div>
+      <div>
+        <p class="concept-point-title">金融機関・保険会社</p>
+        <p class="concept-point-desc">顧客向けセミナーや従業員研修として。金融リテラシーの向上で顧客満足度アップにもつながります。</p>
+      </div>
+    </div>
+    <div class="concept-point">
+      <div class="concept-point-icon">🏢</div>
+      <div>
+        <p class="concept-point-title">一般企業・製造業</p>
+        <p class="concept-point-desc">福利厚生の充実、従業員のエンゲージメント向上、DEI推進など幅広いニーズに対応します。</p>
+      </div>
+    </div>
+    <div class="concept-point">
+      <div class="concept-point-icon">🎓</div>
+      <div>
+        <p class="concept-point-title">大学・専門学校</p>
+        <p class="concept-point-desc">就活前の学生向けマネーリテラシー教育や、新社会人向けのお金の使い方セミナーに対応します。</p>
+      </div>
+    </div>
+    <div class="concept-point">
+      <div class="concept-point-icon">🏛️</div>
+      <div>
+        <p class="concept-point-title">自治体・公共機関</p>
+        <p class="concept-point-desc">地域住民向けの金融教育イベントや、職員向けのDEI研修など、公共分野での実績も積み上げています。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- お問い合わせ -->
+<section class="contact fade-in">
+  <p class="section-tag">Contact</p>
+  <h2 class="section-title">初回のご相談は無料です</h2>
+  <p class="contact-desc">
+    まずはお気軽にお問い合わせください😊<br>
+    御社の課題をお聞きした上で、<br>最適なプログラムをご提案します。<br><br>
+    ✨ 今なら初回特別価格をご用意しています✨
+  </p>
+  <div class="contact-btns">
+    <a href="https://lin.ee/nem3Uou" target="_blank" class="btn-white">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="#06C755"><path d="M12 2C6.48 2 2 6.03 2 11c0 3.07 1.6 5.8 4.1 7.54V22l3.7-2.04C10.55 20.3 11.26 20.4 12 20.4c5.52 0 10-4.03 10-9S17.52 2 12 2z"/></svg>
+      LINEでお問い合わせ
+    </a>
+    <a href="https://www.instagram.com/supple.education.labo/" target="_blank" class="btn-outline-white">
+      📸 Instagramを見る
+    </a>
+  </div>
+</section>
+
+<footer>
+  <strong>Supple Education Labo</strong><br>
+  東京都港区南青山（バーチャルオフィス）<br><br>
+  © 2026 Supple Education Labo. All rights reserved.
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

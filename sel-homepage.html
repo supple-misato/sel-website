@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supple Education Labo | SEL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green: #2d8653;
+      --green-light: #3d9970;
+      --green-pale: #e8f5ee;
+      --pink: #e8829a;
+      --pink-pale: #fff0f3;
+      --text: #1a2e22;
+      --text-light: #5a7a65;
+      --white: #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ナビ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(61,153,112,0.15);
+      padding: 14px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 8px; }
+    .nav-logo-icon {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--green), var(--green-light));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 16px;
+    }
+    .nav-logo-text { font-size: 13px; font-weight: 900; color: var(--green); letter-spacing: 0.08em; }
+    .nav-logo-sub { font-size: 10px; color: var(--text-light); letter-spacing: 0.06em; }
+    .nav-line {
+      background: #06C755; color: white;
+      padding: 8px 16px; border-radius: 50px;
+      font-size: 12px; font-weight: 700;
+      text-decoration: none;
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    /* ヒーロー */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(160deg, #e8f5ee 0%, #f7fbf3 60%, #fff0f3 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 100px 24px 60px;
+      position: relative; overflow: hidden;
+      text-align: center;
+    }
+    .hero-circle1 {
+      position: absolute; top: -80px; right: -80px;
+      width: 300px; height: 300px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(61,153,112,0.12) 0%, transparent 70%);
+    }
+    .hero-circle2 {
+      position: absolute; bottom: -60px; left: -60px;
+      width: 250px; height: 250px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,130,154,0.10) 0%, transparent 70%);
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: white; border: 1px solid rgba(61,153,112,0.3);
+      border-radius: 50px; padding: 6px 16px;
+      font-size: 11px; color: var(--green); font-weight: 700;
+      letter-spacing: 0.08em; margin-bottom: 24px;
+      box-shadow: 0 2px 12px rgba(61,153,112,0.12);
+    }
+    .hero-en {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px; letter-spacing: 0.3em;
+      color: var(--text-light); margin-bottom: 12px;
+      font-style: italic;
+    }
+    .hero h1 {
+      font-size: clamp(28px, 8vw, 42px);
+      font-weight: 900; line-height: 1.4;
+      color: var(--text); margin-bottom: 8px;
+    }
+    .hero h1 span { color: var(--green); }
+    .hero-sub {
+      font-size: 14px; color: var(--text-light);
+      line-height: 1.8; margin-bottom: 36px;
+    }
+    .hero-btns { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 300px; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--green), var(--green-light));
+      color: white; padding: 16px; border-radius: 14px;
+      font-size: 15px; font-weight: 900;
+      text-decoration: none; text-align: center;
+      box-shadow: 0 4px 20px rgba(45,134,83,0.3);
+      letter-spacing: 0.04em;
+    }
+    .btn-secondary {
+      background: white; color: var(--green);
+      border: 2px solid var(--green);
+      padding: 14px; border-radius: 14px;
+      font-size: 15px; font-weight: 700;
+      text-decoration: none; text-align: center;
+      letter-spacing: 0.04em;
+    }
+    .hero-mascot {
+      margin-top: 40px; font-size: 60px;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* セクション共通 */
+    section { padding: 64px 24px; }
+    .section-tag {
+      font-size: 11px; font-weight: 700; color: var(--green);
+      letter-spacing: 0.2em; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: clamp(22px, 6vw, 32px);
+      font-weight: 900; line-height: 1.4;
+      margin-bottom: 12px;
+    }
+    .section-desc {
+      font-size: 13px; color: var(--text-light);
+      line-height: 1.9; margin-bottom: 32px;
+    }
+
+    /* ミッション */
+    .mission { background: white; }
+    .mission-card {
+      background: linear-gradient(135deg, var(--green-pale), #f7fbf3);
+      border-radius: 20px; padding: 28px 24px;
+      border-left: 4px solid var(--green);
+    }
+    .mission-card p {
+      font-size: 15px; line-height: 2; color: var(--text);
+      font-weight: 500;
+    }
+    .mission-card strong { color: var(--green); }
+
+    /* サービス */
+    .services { background: var(--green-pale); }
+    .service-cards { display: flex; flex-direction: column; gap: 16px; }
+    .service-card {
+      background: white; border-radius: 18px;
+      padding: 24px 20px;
+      box-shadow: 0 4px 20px rgba(45,134,83,0.08);
+    }
+    .service-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; margin-bottom: 14px;
+    }
+    .service-icon.green { background: var(--green-pale); }
+    .service-icon.pink { background: var(--pink-pale); }
+    .service-icon.yellow { background: #fffbf0; }
+    .service-label {
+      font-size: 11px; font-weight: 700; color: var(--green);
+      letter-spacing: 0.1em; margin-bottom: 4px;
+    }
+    .service-name { font-size: 18px; font-weight: 900; margin-bottom: 8px; }
+    .service-desc { font-size: 13px; color: var(--text-light); line-height: 1.8; }
+    .service-more {
+      display: inline-block; margin-top: 12px;
+      color: var(--green); font-size: 13px; font-weight: 700;
+      text-decoration: none; letter-spacing: 0.04em;
+      border-bottom: 1px solid rgba(45,134,83,0.3);
+      padding-bottom: 2px;
+    }
+    .service-more:hover { border-bottom-color: var(--green); }
+    .service-ratio {
+      display: inline-block; margin-top: 12px;
+      background: var(--green-pale); color: var(--green);
+      padding: 4px 12px; border-radius: 50px;
+      font-size: 11px; font-weight: 700;
+    }
+
+    /* プロフィール */
+    .profile { background: white; }
+    .profile-card {
+      background: linear-gradient(160deg, var(--green-pale), white);
+      border-radius: 20px; padding: 28px 24px;
+    }
+    .profile-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+    .profile-avatar {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--green), var(--green-light));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(45,134,83,0.25);
+    }
+    .profile-name-en {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px; color: var(--text-light); letter-spacing: 0.15em;
+      margin-bottom: 2px;
+    }
+    .profile-name { font-size: 20px; font-weight: 900; margin-bottom: 4px; }
+    .profile-title { font-size: 12px; color: var(--green); font-weight: 700; }
+    .profile-desc { font-size: 13px; color: var(--text-light); line-height: 1.9; margin-bottom: 20px; }
+    .profile-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .profile-tag {
+      background: white; border: 1px solid rgba(61,153,112,0.3);
+      color: var(--green); padding: 4px 12px;
+      border-radius: 50px; font-size: 11px; font-weight: 700;
+    }
+
+    /* ツール */
+    .tools { background: var(--green-pale); }
+    .tool-card {
+      background: white; border-radius: 18px;
+      padding: 20px; margin-bottom: 12px;
+      display: flex; align-items: center; gap: 16px;
+      box-shadow: 0 2px 12px rgba(45,134,83,0.08);
+      text-decoration: none; color: var(--text);
+    }
+    .tool-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--green), var(--green-light));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0;
+    }
+    .tool-name { font-size: 15px; font-weight: 900; margin-bottom: 4px; }
+    .tool-desc { font-size: 12px; color: var(--text-light); line-height: 1.6; }
+    .tool-arrow { margin-left: auto; color: var(--green); font-size: 18px; flex-shrink: 0; }
+
+    /* お問い合わせ */
+    .contact {
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%);
+      text-align: center; color: white;
+    }
+    .contact .section-tag { color: rgba(255,255,255,0.7); }
+    .contact .section-title { color: white; }
+    .contact .section-desc { color: rgba(255,255,255,0.8); }
+    .contact-btns { display: flex; flex-direction: column; gap: 12px; max-width: 300px; margin: 0 auto; }
+    .btn-white {
+      background: white; color: var(--green);
+      padding: 16px; border-radius: 14px;
+      font-size: 15px; font-weight: 900;
+      text-decoration: none; text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    .btn-outline-white {
+      background: transparent; color: white;
+      border: 2px solid rgba(255,255,255,0.6);
+      padding: 14px; border-radius: 14px;
+      font-size: 15px; font-weight: 700;
+      text-decoration: none; text-align: center;
+    }
+
+    /* フッター */
+    footer {
+      background: var(--text); color: rgba(255,255,255,0.6);
+      text-align: center; padding: 32px 24px;
+      font-size: 11px; line-height: 2;
+    }
+    footer strong { color: white; font-size: 13px; }
+
+    /* アニメーション */
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- ナビ -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">🌱</div>
+    <div>
+      <div class="nav-logo-text">SEL</div>
+      <div class="nav-logo-sub">Supple Education Labo</div>
+    </div>
+  </div>
+  <a href="https://lin.ee/nem3Uou" target="_blank" class="nav-line">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.03 2 11c0 3.07 1.6 5.8 4.1 7.54V22l3.7-2.04C10.55 20.3 11.26 20.4 12 20.4c5.52 0 10-4.03 10-9S17.52 2 12 2z"/></svg>
+    LINE登録
+  </a>
+</nav>
+
+<!-- ヒーロー -->
+<section class="hero">
+  <div class="hero-circle1"></div>
+  <div class="hero-circle2"></div>
+  <div class="hero-badge">🌱 Supple Education Labo</div>
+  <p class="hero-en">Learning that changes your life</p>
+  <h1>はじめての学びを、<br><span>あなたのそばに。</span></h1>
+  <p class="hero-sub">お金の知識は、生きる力になる。<br>子どもから大人まで、<br>はじめの一歩をご一緒します。</p>
+  <div class="hero-btns">
+    <a href="#services" class="btn-primary">サービスを見る</a>
+    <a href="https://lin.ee/nem3Uou" target="_blank" class="btn-secondary">LINEで無料相談</a>
+  </div>
+  <div class="hero-mascot">🌿</div>
+</section>
+
+<!-- ミッション -->
+<section class="mission fade-in">
+  <p class="section-tag">Our Mission</p>
+  <h2 class="section-title">私たちが<br>大切にしていること</h2>
+  <div class="mission-card">
+    <p>
+      お金の話は、難しくなくていい。<br><br>
+      <strong>「ありがとうの対価がお金になる」</strong>という感覚を子どもたちに。<br>
+      <strong>カンタンで、わかりやすい家計改善</strong>を大人たちに。<br><br>
+      Supple Education Laboは、<br>
+      10年後の人生の選択肢を広げるきっかけを提供いたします。
+    </p>
+  </div>
+</section>
+
+<!-- サービス -->
+<section class="services fade-in" id="services">
+  <p class="section-tag">Services</p>
+  <h2 class="section-title">3つのサービス</h2>
+  <p class="section-desc">お金の教育から、法人向けサポート、ライフプランまで。あなたのライフステージに合わせてサポートします。</p>
+  <div class="service-cards">
+    <div class="service-card">
+      <div class="service-icon green">🪙</div>
+      <p class="service-label">For Kids</p>
+      <h3 class="service-name">子どもの金融教育（小学校低学年向け）</h3>
+      <p class="service-desc">「誰かの役に立つことで対価が得られる」という社会の仕組みを楽しく学べるカードゲーム「Thank youゲーム」。学習指導要領にも対応した唯一の金融教育プログラム。</p>
+      <a href="#" class="service-more">詳しくはこちら →</a>
+    </div>
+    <div class="service-card">
+      <div class="service-icon yellow">🏢</div>
+      <p class="service-label">For Business</p>
+      <h3 class="service-name">法人向けサポート・研修</h3>
+      <p class="service-desc">企業・団体向けの金融教育セミナーや退職給付支援。従業員のマネーリテラシー向上から、女性が働きやすい環境づくり（DEI）まで、組織の課題に合わせてサポートします。</p>
+      <a href="#" class="service-more">詳しくはこちら →</a>
+    </div>
+    <div class="service-card">
+      <div class="service-icon pink">📋</div>
+      <p class="service-label">For Adults</p>
+      <h3 class="service-name">個人向けライフプランコンサルティング</h3>
+      <p class="service-desc">FP（ファイナンシャルプランナー）として、ライフプランを個別にサポートいたします。公式LINEでは、3分でできる家計診断も用意しています。</p>
+      <a href="#" class="service-more">詳しくはこちら →</a>
+    </div>
+  </div>
+</section>
+
+<!-- プロフィール -->
+<section class="profile fade-in" id="profile">
+  <p class="section-tag">Profile</p>
+  <h2 class="section-title">代表プロフィール</h2>
+  <div class="profile-card">
+    <div class="profile-header">
+      <div class="profile-avatar">🌱</div>
+      <div>
+        <p class="profile-name-en">Misato Yamazaki</p>
+        <h3 class="profile-name">山崎 みさと</h3>
+        <p class="profile-title">代表 ／ ファイナンシャルプランナー</p>
+      </div>
+    </div>
+    <p class="profile-desc">
+      金融業界でのキャリアを経て独立。学童での教員経験から、低学年でのお金の教育の必要性を感じて会社を立ち上げました。<br><br>
+      子どもや親の10年後の未来の選択肢を広げるために、楽しく学べる金融教育を目指しています。
+    </p>
+    <div class="profile-tags">
+      <span class="profile-tag">FP2級</span>
+      <span class="profile-tag">AFP</span>
+      <span class="profile-tag">女性の健康経営推進員（公益社団法人 女性の健康とメノポーズ協会）</span>
+    </div>
+  </div>
+</section>
+
+<!-- 無料ツール -->
+<section class="tools fade-in" id="tools">
+  <p class="section-tag">Free Tools</p>
+  <h2 class="section-title">無料ツール</h2>
+  <p class="section-desc">まずはLINE登録からお願いします😊 友だち追加後、いつでも無料でお使いいただけるツールをご用意しています。</p>
+  <a href="https://lin.ee/nem3Uou" target="_blank" class="tool-card">
+    <div class="tool-icon">💰</div>
+    <div>
+      <p class="tool-name">家計かんたん診断</p>
+      <p class="tool-desc">3分で完了！あなたの家計タイプと目標貯蓄額がわかります。<br><small style="color:#06C755;font-weight:700;">👉 LINEで友だち追加してご利用ください</small></p>
+    </div>
+    <span class="tool-arrow">→</span>
+  </a>
+</section>
+
+<!-- お問い合わせ -->
+<section class="contact fade-in" id="contact">
+  <p class="section-tag">Contact</p>
+  <h2 class="section-title">お気軽に<br>ご相談ください</h2>
+  <p class="section-desc">まずはお気軽にお問い合わせください😊<br>セミナーのご依頼・ご相談は<br>LINEまたはInstagramからどうぞ。</p>
+  <div class="contact-btns">
+    <a href="https://lin.ee/nem3Uou" target="_blank" class="btn-white">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="#06C755"><path d="M12 2C6.48 2 2 6.03 2 11c0 3.07 1.6 5.8 4.1 7.54V22l3.7-2.04C10.55 20.3 11.26 20.4 12 20.4c5.52 0 10-4.03 10-9S17.52 2 12 2z"/></svg>
+      LINEで友だち追加
+    </a>
+    <a href="https://www.instagram.com/supple.education.labo/" target="_blank" class="btn-outline-white">
+      📸 Instagramを見る
+    </a>
+  </div>
+</section>
+
+<!-- フッター -->
+<footer>
+  <strong>Supple Education Labo</strong><br>
+  東京都港区南青山（バーチャルオフィス）<br><br>
+  © 2026 Supple Education Labo. All rights reserved.
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

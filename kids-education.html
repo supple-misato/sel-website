@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>子どもの金融教育 | Supple Education Labo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green: #2d8653;
+      --green-light: #3d9970;
+      --green-pale: #e8f5ee;
+      --pink: #e8829a;
+      --pink-pale: #fff0f3;
+      --text: #1a2e22;
+      --text-light: #5a7a65;
+      --white: #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Noto Sans JP', sans-serif; color: var(--text); background: var(--white); overflow-x: hidden; }
+
+    /* ナビ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(61,153,112,0.15);
+      padding: 14px 24px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-back { display: flex; align-items: center; gap: 6px; color: var(--green); font-size: 13px; font-weight: 700; text-decoration: none; }
+    .nav-logo-text { font-size: 13px; font-weight: 900; color: var(--green); letter-spacing: 0.08em; }
+
+    /* ヒーロー */
+    .hero {
+      min-height: 60vh;
+      background: linear-gradient(160deg, #e8f5ee 0%, #f7fbf3 60%, #fff0f3 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 100px 24px 60px; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero-circle1 { position: absolute; top: -60px; right: -60px; width: 250px; height: 250px; border-radius: 50%; background: radial-gradient(circle, rgba(61,153,112,0.12) 0%, transparent 70%); }
+    .hero-circle2 { position: absolute; bottom: -40px; left: -40px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(232,130,154,0.10) 0%, transparent 70%); }
+    .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: white; border: 1px solid rgba(61,153,112,0.3); border-radius: 50px; padding: 6px 16px; font-size: 11px; color: var(--green); font-weight: 700; letter-spacing: 0.08em; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(61,153,112,0.12); }
+    .hero h1 { font-size: clamp(26px, 7vw, 38px); font-weight: 900; line-height: 1.4; margin-bottom: 12px; }
+    .hero h1 span { color: var(--green); }
+    .hero-sub { font-size: 14px; color: var(--text-light); line-height: 1.9; }
+
+    /* セクション共通 */
+    section { padding: 56px 24px; }
+    .section-tag { font-size: 11px; font-weight: 700; color: var(--green); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
+    .section-title { font-size: clamp(20px, 5vw, 28px); font-weight: 900; line-height: 1.4; margin-bottom: 12px; }
+    .section-desc { font-size: 13px; color: var(--text-light); line-height: 1.9; margin-bottom: 28px; }
+
+    /* 社会的背景 */
+    .background { background: white; }
+    .stat-cards { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+    .stat-card { background: var(--green-pale); border-radius: 16px; padding: 20px; border-left: 4px solid var(--green); }
+    .stat-number { font-size: 28px; font-weight: 900; color: var(--green); margin-bottom: 4px; }
+    .stat-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 4px; }
+    .stat-source { font-size: 11px; color: var(--text-light); }
+
+    .background-text { background: #f8fcfa; border-radius: 16px; padding: 24px; border: 1px solid #d0eadb; }
+    .background-text p { font-size: 14px; line-height: 2; color: var(--text); }
+    .background-text strong { color: var(--green); }
+
+    /* コンセプト */
+    .concept { background: var(--green-pale); }
+    .concept-main { background: white; border-radius: 20px; padding: 28px 24px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(45,134,83,0.08); text-align: center; }
+    .concept-icon { font-size: 56px; margin-bottom: 16px; }
+    .concept-title { font-size: 20px; font-weight: 900; color: var(--green); margin-bottom: 12px; line-height: 1.5; }
+    .concept-desc { font-size: 13px; color: var(--text-light); line-height: 1.9; }
+
+    .concept-points { display: flex; flex-direction: column; gap: 12px; }
+    .concept-point { background: white; border-radius: 14px; padding: 18px 20px; display: flex; align-items: flex-start; gap: 14px; }
+    .concept-point-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--green-pale); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .concept-point-title { font-size: 14px; font-weight: 900; margin-bottom: 4px; color: var(--text); }
+    .concept-point-desc { font-size: 12px; color: var(--text-light); line-height: 1.7; }
+
+    /* 学習指導要領 */
+    .curriculum { background: white; }
+    .curriculum-card { background: linear-gradient(135deg, var(--green), var(--green-light)); border-radius: 20px; padding: 28px 24px; color: white; margin-bottom: 20px; }
+    .curriculum-card h3 { font-size: 18px; font-weight: 900; margin-bottom: 12px; line-height: 1.5; }
+    .curriculum-card p { font-size: 13px; line-height: 1.9; opacity: 0.9; }
+    .curriculum-list { display: flex; flex-direction: column; gap: 10px; }
+    .curriculum-item { background: var(--green-pale); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 700; color: var(--text); }
+
+    /* 対象・形式 */
+    .format { background: var(--green-pale); }
+    .format-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .format-card { background: white; border-radius: 14px; padding: 18px 14px; text-align: center; }
+    .format-card-icon { font-size: 28px; margin-bottom: 8px; }
+    .format-card-label { font-size: 10px; color: var(--green); font-weight: 700; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .format-card-value { font-size: 14px; font-weight: 900; color: var(--text); line-height: 1.4; }
+
+    /* お問い合わせ */
+    .contact { background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%); text-align: center; color: white; }
+    .contact .section-tag { color: rgba(255,255,255,0.7); }
+    .contact .section-title { color: white; }
+    .contact-desc { font-size: 13px; color: rgba(255,255,255,0.85); line-height: 1.9; margin-bottom: 28px; }
+    .contact-btns { display: flex; flex-direction: column; gap: 12px; max-width: 300px; margin: 0 auto; }
+    .btn-white { background: white; color: var(--green); padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 900; text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+    .btn-outline-white { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.6); padding: 14px; border-radius: 14px; font-size: 15px; font-weight: 700; text-decoration: none; text-align: center; }
+
+    /* フッター */
+    footer { background: var(--text); color: rgba(255,255,255,0.6); text-align: center; padding: 32px 24px; font-size: 11px; line-height: 2; }
+    footer strong { color: white; font-size: 13px; }
+
+    /* アニメーション */
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- ナビ -->
+<nav>
+  <a href="index.html" class="nav-back">← SEL トップへ</a>
+  <span class="nav-logo-text">SEL</span>
+</nav>
+
+<!-- ヒーロー -->
+<section class="hero">
+  <div class="hero-circle1"></div>
+  <div class="hero-circle2"></div>
+  <div class="hero-badge">🪙 For Kids / For Business</div>
+  <h1>子どもたちに、<br><span>お金と社会の仕組みを。</span></h1>
+  <p class="hero-sub">「ありがとうの対価がお金になる」<br>楽しく学べる金融教育プログラム</p>
+</section>
+
+<!-- 社会的背景 -->
+<section class="background fade-in">
+  <p class="section-tag">Background</p>
+  <h2 class="section-title">なぜ今、<br>子どもの金融教育が必要なのか</h2>
+  <div class="background-text" style="margin-bottom:20px">
+    <p>
+      金融庁は次のように述べています。<br><br>
+      <strong>「2022年4月からの成年年齢引下げにより、18歳からクレジットカードを作るなど金融に関する様々な契約を自ら行えるようになり、金融経済教育の重要性はますます高まっています。また、2022年4月からの高校学習指導要領改訂では、金融経済教育の内容が拡充されました。」</strong><br><br>
+      （出典：金融庁ウェブサイト）<br><br>
+      こうした社会の変化を受け、Supple Education Laboでは小学校低学年からの金融教育に取り組んでいます。
+    </p>
+  </div>
+
+  <div style="background:var(--green);border-radius:16px;padding:20px 24px;margin-bottom:20px;text-align:center;">
+    <p style="color:white;font-size:16px;font-weight:900;letter-spacing:0.04em;">では、なぜ小学校低学年からなのか？</p>
+  </div>
+
+  <div class="stat-cards">
+    <div class="stat-card">
+      <div class="stat-number">① 社会への第一歩</div>
+      <div class="stat-label">小学校入学は社会に出る最初のタイミング</div>
+      <div class="stat-source">ルールがあり、役割があり、人と関わる。お金の仕組みを学ぶ最初の機会として最適だと考えます。</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">② 親子で学べる最後の時期</div>
+      <div class="stat-label">3年生頃から子どもは友達と過ごす時間が増える</div>
+      <div class="stat-source">子育ての経験から、子どもだけでお金を自分で使うようになるのが3年生くらいからだと認識しています。ただ、今はキャッシュレス決済が中心なので、もう少し早いのかもしれません。だからこそ、小学校低学年のうちに親子でお金について話せる機会を提供することで、10年後の子どもたちの選択肢を広げるきっかけになると信じています。</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">③ 学習指導要領との合致</div>
+      <div class="stat-label">「社会とのかかわり・よりよい人生」を育む方針に直結</div>
+      <div class="stat-source">学習指導要領が掲げる「社会や人生をより良くする力」「よりよい人生の作り手となる力」。人の役に立つことが対価につながるThank youゲームのコンセプトは、この教育理念に沿った内容となっております。</div>
+    </div>
+  </div>
+</section>
+
+<!-- コンセプト -->
+<section class="concept fade-in">
+  <p class="section-tag">Concept</p>
+  <h2 class="section-title">Thank youゲームとは</h2>
+  <div class="concept-main">
+    <div class="concept-icon">🃏</div>
+    <h3 class="concept-title">「誰かの役に立つことで<br>対価が得られる」<br>を楽しく学ぶカードゲーム</h3>
+    <p class="concept-desc">お金＝ありがとうの交換という感覚を、カードゲームを通じて体感。「誰かの役に立つとは？」という基本的なお金の生まれる仕組みを学びます。カードには小学校低学年でもわかりやすいイラストがあるので、直感的にお金と社会の仕組みについて体験できます。</p>
+  </div>
+  <div class="concept-points">
+    <div class="concept-point">
+      <div class="concept-point-icon">💚</div>
+      <div>
+        <p class="concept-point-title">「ありがとう」の対価がお金になる体験</p>
+        <p class="concept-point-desc">「誰かの役に立つ」「誰かに損失を与える」「自分だけが良くなる」という3種類のカードを使いながら、小学生の生活圏内で起きる「ありがとう」が生まれる仕組みを学びます。</p>
+      </div>
+    </div>
+    <div class="concept-point">
+      <div class="concept-point-icon">🪙</div>
+      <div>
+        <p class="concept-point-title">ゲームだから楽しく続けられる</p>
+        <p class="concept-point-desc">講義型とゲーム体験のハイブリッド形式。子どもだけではなく、大人も参加しながら一緒に楽しく社会の仕組みを学べる設計です。</p>
+      </div>
+    </div>
+    <div class="concept-point">
+      <div class="concept-point-icon">👨‍👩‍👧</div>
+      <div>
+        <p class="concept-point-title">大人も一緒に学べる</p>
+        <p class="concept-point-desc">「事実に基づく対価」を得る仕組みを、大人も一緒に学べる設計。家に帰った後でも会話が生まれる仕組みを提供していきます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Thank youゲームのルール -->
+<section class="curriculum fade-in">
+  <p class="section-tag">How to Play</p>
+  <h2 class="section-title">Thank youゲームの<br>ルール</h2>
+  <p class="section-desc">勝ち負けのないゲームです。大人も一緒に参加しながら、自然とお金の仕組みを体験できます。</p>
+
+  <div style="background:var(--green);border-radius:16px;padding:18px 20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;">
+    <div style="font-size:28px;">🏆</div>
+    <div>
+      <p style="color:white;font-size:14px;font-weight:900;margin-bottom:2px;">勝ち負けなし！</p>
+      <p style="color:rgba(255,255,255,0.85);font-size:12px;line-height:1.6;">みんなで参加して、みんなで学ぶゲームです。</p>
+    </div>
+  </div>
+
+  <div class="curriculum-list">
+    <div class="curriculum-item" style="flex-direction:column;align-items:flex-start;gap:4px;">
+      <div style="display:flex;align-items:center;gap:10px;font-weight:900;">⏱️ 所要時間・形式</div>
+      <div style="font-size:12px;color:var(--text-light);font-weight:400;padding-left:30px;">45〜60分。2〜4人のグループワーク形式で実施します。各グループには必ず大人が1人（バンク役）入ります。</div>
+    </div>
+    <div class="curriculum-item" style="flex-direction:column;align-items:flex-start;gap:4px;">
+      <div style="display:flex;align-items:center;gap:10px;font-weight:900;">🃏 3種類のカード</div>
+      <div style="font-size:12px;color:var(--text-light);font-weight:400;padding-left:30px;">「誰かの役に立つ」「誰かに損失を与える」「自分だけが良くなる」の3種類。ランダムに伏せられたカードを1枚ずつめくります。</div>
+    </div>
+    <div class="curriculum-item" style="flex-direction:column;align-items:flex-start;gap:4px;">
+      <div style="display:flex;align-items:center;gap:10px;font-weight:900;">💰 コインカードの仕組み</div>
+      <div style="font-size:12px;color:var(--text-light);font-weight:400;padding-left:30px;">めくったカードをバンク（大人）に渡すと、バンクがプレーヤーの封筒にコインカードを入れます。場のカードがすべてなくなったらゲーム終了です。</div>
+    </div>
+    <div class="curriculum-item" style="flex-direction:column;align-items:flex-start;gap:4px;">
+      <div style="display:flex;align-items:center;gap:10px;font-weight:900;">🔄 2ゲーム1セット</div>
+      <div style="font-size:12px;color:var(--text-light);font-weight:400;padding-left:30px;">2ゲームを1セットとして実施。1回目と2回目で気づきが深まる設計になっています。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ゲーム後の楽しみ -->
+<section class="curriculum fade-in">
+  <p class="section-tag">After Game</p>
+  <h2 class="section-title">ゲームの後も<br>楽しみが続きます</h2>
+  <p class="section-desc">ゲームが終わったら終わり、ではありません。体験を「生活」につなげる仕掛けをご用意しています。</p>
+  <div class="curriculum-list">
+    <div class="curriculum-item" style="flex-direction:column;align-items:flex-start;gap:4px;">
+      <div style="display:flex;align-items:center;gap:10px;font-weight:900;">🏷️ シールの購入体験</div>
+      <div style="font-size:12px;color:var(--text-light);font-weight:400;padding-left:30px;">ゲーム終了後にはシール台紙を配ります。そこで子どもたちには、自分で得たコインでシール購入体験をしてもらいます。「消費」「貯蓄」などお金を使うことを実際に体験してもらいます。</div>
+    </div>
+    <div class="curriculum-item" style="flex-direction:column;align-items:flex-start;gap:4px;">
+      <div style="display:flex;align-items:center;gap:10px;font-weight:900;">💌 ありがとうのお手紙</div>
+      <div style="font-size:12px;color:var(--text-light);font-weight:400;padding-left:30px;">「ありがとうを伝えたい人」へのお手紙を書く時間。ゲームで学んだ「ありがとう」を伝えたい家族に、子どもたちの言葉で思いを形にしていきます。</div>
+    </div>
+    <div class="curriculum-item" style="flex-direction:column;align-items:flex-start;gap:4px;">
+      <div style="display:flex;align-items:center;gap:10px;font-weight:900;">🎨 ぬりえのおまけ</div>
+      <div style="font-size:12px;color:var(--text-light);font-weight:400;padding-left:30px;">早く終わった子どもでも飽きないように、メインキャラクターの塗り絵をプレゼントします。子どもの自由な発想で楽しく色ぬりを楽しんでもらいます。</div>
+    </div>
+    <div class="curriculum-item" style="flex-direction:column;align-items:flex-start;gap:4px;">
+      <div style="display:flex;align-items:center;gap:10px;font-weight:900;">📚 絵本の提供（オプション）</div>
+      <div style="font-size:12px;color:var(--text-light);font-weight:400;padding-left:30px;">ゲームのコンセプトをさらに深める絵本をご用意。「お金ってどうやってもらえるのかな？」という基本を、おうちに帰ってからも読み返すことができるポケットサイズの絵本です。家に帰ってからの会話のきっかけを提供していきます。</div>
+    </div>
+  </div>
+</section>
+
+<!-- こんな方にご活用いただけます -->
+<section class="format fade-in">
+  <p class="section-tag">For You</p>
+  <h2 class="section-title">こんな方・場面に<br>ご活用いただけます</h2>
+  <p class="section-desc">教育機関から企業イベントまで、幅広い場面でご活用いただいています。</p>
+
+  <div class="concept-points">
+    <div class="concept-point">
+      <div class="concept-point-icon">🏫</div>
+      <div>
+        <p class="concept-point-title">教育委員会・小学校</p>
+        <p class="concept-point-desc">学習指導要領に沿った金融教育として。授業や特別活動、PTA主催のイベントなどにご活用いただけます。</p>
+      </div>
+    </div>
+    <div class="concept-point">
+      <div class="concept-point-icon">🏠</div>
+      <div>
+        <p class="concept-point-title">学童・放課後施設</p>
+        <p class="concept-point-desc">放課後の時間を使った体験型プログラムとして。子どもたちが楽しみながら社会の仕組みを学べます。</p>
+      </div>
+    </div>
+    <div class="concept-point">
+      <div class="concept-point-icon">🏦</div>
+      <div>
+        <p class="concept-point-title">金融機関</p>
+        <p class="concept-point-desc">顧客向けファミリーイベントや地域貢献活動として。お金の教育を通じて顧客との関係強化にもつながります。</p>
+      </div>
+    </div>
+    <div class="concept-point">
+      <div class="concept-point-icon">🏡</div>
+      <div>
+        <p class="concept-point-title">住宅メーカー・不動産</p>
+        <p class="concept-point-desc">ファミリー向けイベントやモデルハウスでの体験企画として。子ども連れのご家族に喜ばれるコンテンツです。</p>
+      </div>
+    </div>
+    <div class="concept-point">
+      <div class="concept-point-icon">🏢</div>
+      <div>
+        <p class="concept-point-title">企業の社員向け家族イベント</p>
+        <p class="concept-point-desc">福利厚生の一環として、社員のお子さんを対象にしたファミリーデーなどにご活用いただけます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- お問い合わせ -->
+<section class="contact fade-in">
+  <p class="section-tag">Contact</p>
+  <h2 class="section-title">初回のご相談は無料です</h2>
+  <p class="contact-desc">
+    導入をご検討の教育委員会・企業・団体の方、<br>
+    まずはお気軽にお問い合わせください😊<br><br>
+    ✨ 今なら初回特別価格をご用意しています✨
+  </p>
+  <div class="contact-btns">
+    <a href="https://lin.ee/nem3Uou" target="_blank" class="btn-white">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="#06C755"><path d="M12 2C6.48 2 2 6.03 2 11c0 3.07 1.6 5.8 4.1 7.54V22l3.7-2.04C10.55 20.3 11.26 20.4 12 20.4c5.52 0 10-4.03 10-9S17.52 2 12 2z"/></svg>
+      LINEでお問い合わせ
+    </a>
+    <a href="https://www.instagram.com/supple.education.labo/" target="_blank" class="btn-outline-white">
+      📸 Instagramを見る
+    </a>
+  </div>
+</section>
+
+<!-- フッター -->
+<footer>
+  <strong>Supple Education Labo</strong><br>
+  東京都港区南青山（バーチャルオフィス）<br><br>
+  © 2026 Supple Education Labo. All rights reserved.
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
