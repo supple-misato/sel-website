@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>あなたのお金タイプ診断（詳細版）| Supple Education Labo</title>
+  <style>
+    :root {
+      --green:       #3B6D11;
+      --green-mid:   #5a8f2a;
+      --green-pale:  #edf3e4;
+      --green-muted: #6b8f4a;
+      --pink:        #D4537E;
+      --pink-dark:   #b8416a;
+      --pink-pale:   #fce8ef;
+      --cream:       #FAFAF7;
+      --text:        #2a2a2a;
+      --text-sub:    #666;
+      --text-light:  #aaa;
+      --border:      #e8e4dd;
+      --shadow:      0 4px 20px rgba(0,0,0,0.08);
+      --shadow-lg:   0 8px 36px rgba(0,0,0,0.13);
+      --r:           16px;
+      --r-sm:        10px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic UI', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── SCREEN TOGGLE ─── */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ════════════════════════════════════
+       INPUT SCREEN
+    ════════════════════════════════════ */
+    .i-hero {
+      background: linear-gradient(145deg, #3B6D11 0%, #5a8f2a 65%, #6fb030 100%);
+      padding: 52px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .i-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 30%, rgba(255,255,255,0.1) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .brand-tag {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.72);
+      letter-spacing: 0.15em;
+      margin-bottom: 22px;
+    }
+
+    .i-hero-emoji {
+      font-size: 2.8rem;
+      display: block;
+      margin-bottom: 18px;
+      animation: float 3.5s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-9px); }
+    }
+
+    .i-hero-title {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.45;
+      margin-bottom: 6px;
+    }
+    .i-hero-title small { font-size: 0.72em; opacity: 0.88; }
+
+    .i-hero-catch {
+      display: inline-block;
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.32);
+      border-radius: 30px;
+      padding: 8px 22px;
+      font-size: 0.83rem;
+      color: rgba(255,255,255,0.94);
+      margin-top: 14px;
+      backdrop-filter: blur(4px);
+    }
+
+    /* Wave */
+    .i-wave { display: block; width: 100%; line-height: 0; margin-top: -1px; }
+
+    .i-body {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 0 16px 56px;
+    }
+
+    .i-card {
+      background: #fff;
+      border-radius: var(--r);
+      padding: 32px 28px 28px;
+      box-shadow: var(--shadow-lg);
+      margin-top: -50px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .i-card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--green);
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .i-card-sub {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      text-align: center;
+      line-height: 1.65;
+      margin-bottom: 26px;
+    }
+
+    .field-lbl {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 10px;
+    }
+
+    .date-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .date-row select {
+      flex: 1;
+      padding: 12px 28px 12px 12px;
+      border: 2px solid var(--border);
+      border-radius: var(--r-sm);
+      font-size: 0.95rem;
+      color: var(--text);
+      background: #fff;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%233B6D11' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+    }
+    .date-row select:focus {
+      outline: none;
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(59,109,17,0.12);
+    }
+    .date-row select.yr { flex: 2; }
+    .date-row .unit {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .err-msg {
+      color: var(--pink);
+      font-size: 0.78rem;
+      margin-top: 8px;
+      display: none;
+    }
+
+    .btn-go {
+      width: 100%;
+      margin-top: 24px;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-mid) 100%);
+      color: #fff;
+      border: none;
+      border-radius: var(--r-sm);
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+      box-shadow: 0 4px 18px rgba(59,109,17,0.3);
+      transition: opacity 0.2s, transform 0.1s;
+      font-family: inherit;
+    }
+    .btn-go:hover  { opacity: 0.88; }
+    .btn-go:active { transform: scale(0.98); }
+
+    .privacy { text-align: center; font-size: 0.72rem; color: var(--text-light); margin-top: 12px; }
+
+    /* ════════════════════════════════════
+       RESULT SCREEN
+    ════════════════════════════════════ */
+    .r-hero {
+      background: linear-gradient(145deg, #2f5a0d 0%, var(--green) 45%, var(--green-mid) 100%);
+      padding: 48px 24px 68px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .r-hero::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      right: -10%;
+      width: 70%;
+      height: 170%;
+      background: radial-gradient(ellipse, rgba(255,255,255,0.09) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    /* — number — */
+    .r-num-wrap {
+      margin-bottom: 14px;
+      opacity: 0;
+    }
+    .r-num-circle {
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.45);
+      color: #fff;
+      font-size: 1.9rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+      margin-bottom: 6px;
+    }
+    .r-num-circle.two-digit { font-size: 1.4rem; }
+    .r-num-lbl {
+      display: block;
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 0.1em;
+    }
+
+    /* — announce — */
+    .r-announce { opacity: 0; }
+    .r-pre  {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 4px;
+    }
+    .r-name {
+      font-size: 2.3rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+      opacity: 0;
+    }
+    .r-emoji {
+      font-size: 3.4rem;
+      display: block;
+      margin: 10px auto 10px;
+      opacity: 0;
+    }
+    .r-master {
+      display: inline-block;
+      background: rgba(212,83,126,0.85);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.08em;
+      opacity: 0;
+    }
+    .r-scroll-hint {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.55);
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      opacity: 0;
+    }
+
+    /* — animation keyframes — */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes popIn {
+      0%   { opacity: 0; transform: scale(0.35); }
+      65%  { opacity: 1; transform: scale(1.07); }
+      82%  { transform: scale(0.96); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    @keyframes bounceIn {
+      0%   { opacity: 0; transform: translateY(-50px) scale(0.5); }
+      55%  { opacity: 1; transform: translateY(7px) scale(1.08); }
+      75%  { transform: translateY(-5px) scale(0.96); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes hintPulse {
+      0%   { opacity: 0; transform: translateX(-50%) translateY(0); }
+      15%  { opacity: 0.75; }
+      55%  { opacity: 0.75; transform: translateX(-50%) translateY(5px); }
+      85%  { opacity: 0.5; }
+      100% { opacity: 0; transform: translateX(-50%) translateY(0); }
+    }
+
+    /* — cards area — */
+    .r-body {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 0 16px 56px;
+    }
+    .r-cards {
+      margin-top: -28px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* scroll reveal */
+    .rv {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .rv.in { opacity: 1; transform: translateY(0); }
+
+    /* info card */
+    .ic {
+      background: #fff;
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .ic-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 20px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      background: var(--green);
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      min-height: 54px;
+    }
+    .ic-head:hover { filter: brightness(1.07); }
+    .ic-head:active { filter: brightness(0.95); }
+    .ic-head .ico { font-size: 1.1rem; flex-shrink: 0; }
+    .ic-head-label { flex: 1; }
+    .ic-chevron {
+      font-size: 0.72rem;
+      flex-shrink: 0;
+      display: inline-block;
+      transition: transform 0.32s ease;
+      opacity: 0.85;
+    }
+    .ic.open .ic-chevron { transform: rotate(90deg); }
+
+    .ic-body {
+      max-height: 0;
+      overflow: hidden;
+      background: var(--green-pale);
+      padding: 0 20px;
+      transition: max-height 0.42s ease, padding 0.32s ease;
+    }
+    .ic.open .ic-body {
+      max-height: 700px;
+      padding: 18px 20px;
+    }
+    .ic-body ul { list-style: none; }
+    .ic-body li {
+      font-size: 0.9rem;
+      line-height: 1.82;
+      color: var(--text);
+      padding: 2px 0 2px 20px;
+      position: relative;
+    }
+    .ic-body li::before {
+      content: '✦';
+      position: absolute;
+      left: 0;
+      color: var(--green-muted);
+      font-size: 0.58rem;
+      top: 8px;
+    }
+    .ic-prose-divider {
+      border: none;
+      border-top: 1px dashed #cdc9c0;
+      margin: 16px 0 14px;
+    }
+    .ic-prose {
+      font-size: 0.84rem;
+      line-height: 2.1;
+      color: #444444;
+      white-space: pre-line;
+    }
+    /* advice variant */
+    .ic.adv .ic-head             { background: var(--pink); }
+    .ic.adv .ic-body             { background: var(--pink-pale); }
+    .ic.adv .ic-body li::before  { color: var(--pink); }
+    .ic.adv .ic-prose-divider    { border-top-color: #e8b8cb; }
+
+    /* CTA */
+    .cta-card {
+      background: #fff;
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding: 32px 24px;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .cta-deco  { font-size: 2rem; display: block; margin-bottom: 12px; }
+    .cta-title { font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .cta-text  {
+      font-size: 0.84rem;
+      color: var(--text-sub);
+      line-height: 1.8;
+      margin-bottom: 22px;
+    }
+
+    .btn-line {
+      display: inline-block;
+      background: var(--pink);
+      color: #fff;
+      padding: 15px 40px;
+      border-radius: 30px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      box-shadow: 0 4px 18px rgba(212,83,126,0.35);
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    }
+    .btn-line:hover  { background: var(--pink-dark); box-shadow: 0 6px 24px rgba(212,83,126,0.42); }
+    .btn-line:active { transform: scale(0.97); }
+
+    .btn-retry {
+      display: block;
+      text-align: center;
+      margin-top: 18px;
+      color: var(--text-sub);
+      font-size: 0.82rem;
+      cursor: pointer;
+      text-decoration: underline;
+      background: none;
+      border: none;
+      font-family: inherit;
+      padding: 8px;
+    }
+    .btn-retry:hover { color: var(--green); }
+
+    /* footer */
+    .footer {
+      text-align: center;
+      font-size: 0.7rem;
+      color: var(--text-light);
+      padding: 24px 16px;
+    }
+
+    /* responsive */
+    @media (max-width: 420px) {
+      .i-hero-title { font-size: 1.28rem; }
+      .i-card { padding: 24px 16px 20px; margin-top: -36px; }
+      .r-name { font-size: 1.9rem; }
+      .ic-head { padding: 14px 15px; min-height: 50px; }
+      .ic.open .ic-body { padding: 14px 15px; }
+    }
+    /* ════════════════════════════════════
+       AUTH SCREEN
+    ════════════════════════════════════ */
+    .pw-wrap {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(160deg, #3B6D11 0%, #5a8f2a 55%, #6fb030 100%);
+      padding: 40px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .pw-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 25%, rgba(255,255,255,0.1) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .pw-logo {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 10px;
+    }
+    .pw-emoji {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 14px;
+      animation: float 3.5s ease-in-out infinite;
+    }
+    .pw-title {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #fff;
+      text-align: center;
+      line-height: 1.55;
+      margin-bottom: 6px;
+    }
+    .pw-sub {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .pw-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 36px 32px 28px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 8px 36px rgba(0,0,0,0.18);
+    }
+    .pw-card-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--green);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .pw-input-wrap {
+      position: relative;
+      margin-bottom: 10px;
+    }
+    .pw-input {
+      width: 100%;
+      padding: 14px 48px 14px 16px;
+      border: 2px solid var(--border);
+      border-radius: var(--r-sm);
+      font-size: 1rem;
+      font-family: inherit;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+      background: var(--cream);
+    }
+    .pw-input:focus { border-color: var(--green); }
+    .pw-input.err   { border-color: #c0392b; }
+    .pw-toggle {
+      position: absolute;
+      right: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.05rem;
+      color: var(--text-sub);
+      padding: 4px;
+      line-height: 1;
+    }
+    .pw-err {
+      font-size: 0.78rem;
+      color: #c0392b;
+      text-align: center;
+      min-height: 1.1em;
+      margin-bottom: 12px;
+      display: none;
+    }
+    .pw-err.show { display: block; }
+    .pw-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--pink) 0%, var(--pink-dark) 100%);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: opacity 0.2s, transform 0.15s;
+      box-shadow: 0 4px 14px rgba(212,83,126,0.35);
+    }
+    .pw-btn:hover  { opacity: 0.88; }
+    .pw-btn:active { transform: scale(0.98); }
+    .pw-contact {
+      font-size: 0.74rem;
+      color: var(--text-light);
+      text-align: center;
+      margin-top: 20px;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ AUTH SCREEN ══════════ -->
+<div id="screen-auth" class="screen active">
+  <div class="pw-wrap">
+    <p class="pw-logo">Supple Education Labo</p>
+    <span class="pw-emoji">💰</span>
+    <h1 class="pw-title">お金タイプ診断<br><span style="font-size:0.72em; font-weight:500;">（詳細版）</span></h1>
+    <p class="pw-sub">パスワードを入力してお進みください</p>
+
+    <div class="pw-card">
+      <p class="pw-card-title">🔑 パスワードを入力</p>
+      <div class="pw-input-wrap">
+        <input type="password" id="pw-input" class="pw-input"
+               placeholder="パスワード"
+               oninput="clearPwErr()"
+               onkeydown="if(event.key==='Enter')checkPw()">
+        <button class="pw-toggle" type="button" onclick="togglePwVis()" id="pw-toggle-btn" aria-label="表示切替">👁</button>
+      </div>
+      <p class="pw-err" id="pw-err">パスワードが違います</p>
+      <button class="pw-btn" onclick="checkPw()">進む →</button>
+      <p class="pw-contact">パスワードをお忘れの方は<br>LINEへお問い合わせください</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ INPUT SCREEN ══════════ -->
+<div id="screen-input" class="screen">
+
+  <div class="i-hero">
+    <p class="brand-tag">Supple Education Labo</p>
+    <span class="i-hero-emoji">💰</span>
+    <h1 class="i-hero-title">あなたのお金タイプ診断<br><small>（詳細版）</small></h1>
+    <span class="i-hero-catch">✨ お金は楽しい未来を叶えるもの</span>
+  </div>
+
+  <svg class="i-wave" viewBox="0 0 1200 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,0 C200,64 500,0 750,40 C950,70 1100,16 1200,36 L1200,64 L0,64 Z" fill="#FAFAF7"/>
+  </svg>
+
+  <div class="i-body">
+    <div class="i-card">
+      <p class="i-card-title">✨ 生年月日を入力してください</p>
+      <p class="i-card-sub">数秘術のライフパスナンバーをもとに<br>あなただけのお金タイプを診断します</p>
+
+      <label class="field-lbl">生年月日</label>
+      <div class="date-row">
+        <select id="sel-year" class="yr"><option value="">年</option></select>
+        <span class="unit">年</span>
+        <select id="sel-month"><option value="">月</option></select>
+        <span class="unit">月</span>
+        <select id="sel-day"><option value="">日</option></select>
+        <span class="unit">日</span>
+      </div>
+      <p class="err-msg" id="err-msg">生年月日を正しく選択してください</p>
+
+      <button class="btn-go" onclick="diagnose()">✨ 診断する</button>
+      <p class="privacy">※ 入力された情報は外部に送信・保存されません</p>
+    </div>
+  </div>
+
+  <footer class="footer">© 2026 Supple Education Labo（株式会社SEL）</footer>
+</div>
+
+
+<!-- ══════════ RESULT SCREEN ══════════ -->
+<div id="screen-result" class="screen">
+
+  <div class="r-hero">
+    <div class="r-num-wrap" id="rNumWrap">
+      <div class="r-num-circle" id="rNum">-</div>
+      <span class="r-num-lbl">ライフパスナンバー</span>
+    </div>
+    <div class="r-announce" id="rAnnounce">
+      <p class="r-pre">あなたは</p>
+      <div class="r-name" id="rName"></div>
+      <span class="r-emoji" id="rEmoji"></span>
+      <span class="r-master" id="rMaster" style="display:none;">✦ マスターナンバー</span>
+    </div>
+    <span class="r-scroll-hint" id="rHint">▼ 詳細を見る ▼</span>
+  </div>
+
+  <div class="r-body">
+    <div class="r-cards">
+
+      <div class="ic rv" id="cPersonality">
+        <div class="ic-head" onclick="toggleAcc(this.closest('.ic'))">
+          <span class="ico">✨</span>
+          <span class="ic-head-label">性格の特徴</span>
+          <span class="ic-chevron">▶</span>
+        </div>
+        <div class="ic-body"><ul id="lPersonality"></ul><div class="ic-prose-wrap" id="pPersonality"></div></div>
+      </div>
+
+      <div class="ic rv" id="cSpending">
+        <div class="ic-head" onclick="toggleAcc(this.closest('.ic'))">
+          <span class="ico">💰</span>
+          <span class="ic-head-label">お金の使い方</span>
+          <span class="ic-chevron">▶</span>
+        </div>
+        <div class="ic-body"><ul id="lSpending"></ul><div class="ic-prose-wrap" id="pSpending"></div></div>
+      </div>
+
+      <div class="ic rv" id="cSaving">
+        <div class="ic-head" onclick="toggleAcc(this.closest('.ic'))">
+          <span class="ico">🐷</span>
+          <span class="ic-head-label">お金の貯め方</span>
+          <span class="ic-chevron">▶</span>
+        </div>
+        <div class="ic-body"><ul id="lSaving"></ul><div class="ic-prose-wrap" id="pSaving"></div></div>
+      </div>
+
+      <div class="ic adv rv" id="cAdvice">
+        <div class="ic-head" onclick="toggleAcc(this.closest('.ic'))">
+          <span class="ico">🍀</span>
+          <span class="ic-head-label">みさとからのアドバイス</span>
+          <span class="ic-chevron">▶</span>
+        </div>
+        <div class="ic-body"><ul id="lAdvice"></ul><div class="ic-prose-wrap" id="pAdvice"></div></div>
+      </div>
+
+      <div class="rv" id="cCta">
+        <div class="cta-card">
+          <span class="cta-deco">💚</span>
+          <p class="cta-title">もっと詳しく知りたい方へ</p>
+          <p class="cta-text">
+            あなたのお金タイプをもとに<br>
+            具体的なアドバイスをお伝えします。<br>
+            まずはお気軽にご相談ください。
+          </p>
+          <a href="#" class="btn-line">💬 LINEでご相談する</a>
+        </div>
+        <button class="btn-retry" onclick="retry()">← もう一度診断する</button>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="footer">© 2026 Supple Education Labo（株式会社SEL）</footer>
+</div>
+
+
+<script>
+// ══════════════════════════════════════
+// パスワード認証
+// ══════════════════════════════════════
+const PW_STORAGE_KEY = 'sel_mt_auth_v2';
+const PW_CORRECT     = 'moneytype2026';
+
+(function initAuth() {
+  if (localStorage.getItem(PW_STORAGE_KEY) === '1') {
+    document.getElementById('screen-auth').classList.remove('active');
+    document.getElementById('screen-input').classList.add('active');
+  }
+})();
+
+function checkPw() {
+  const val = document.getElementById('pw-input').value;
+  if (val === PW_CORRECT) {
+    localStorage.setItem(PW_STORAGE_KEY, '1');
+    document.getElementById('screen-auth').classList.remove('active');
+    document.getElementById('screen-input').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  } else {
+    document.getElementById('pw-err').classList.add('show');
+    document.getElementById('pw-input').classList.add('err');
+    document.getElementById('pw-input').focus();
+  }
+}
+
+function clearPwErr() {
+  document.getElementById('pw-err').classList.remove('show');
+  document.getElementById('pw-input').classList.remove('err');
+}
+
+function togglePwVis() {
+  const inp = document.getElementById('pw-input');
+  const btn = document.getElementById('pw-toggle-btn');
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    inp.type = 'password';
+    btn.textContent = '👁';
+  }
+}
+
+// ══════════════════════════════════════
+// セレクト初期化
+// ══════════════════════════════════════
+(function () {
+  const Y = document.getElementById('sel-year');
+  const M = document.getElementById('sel-month');
+  const D = document.getElementById('sel-day');
+  const now = new Date().getFullYear();
+  for (let y = now; y >= 1930; y--) Y.add(new Option(y, y));
+  for (let m = 1; m <= 12; m++) M.add(new Option(m, m));
+  function fillDays() {
+    const y = +Y.value || 2000, m = +M.value || 1;
+    const max = new Date(y, m, 0).getDate(), cur = +D.value;
+    D.innerHTML = '<option value="">日</option>';
+    for (let d = 1; d <= max; d++) D.add(new Option(d, d));
+    if (cur && cur <= max) D.value = cur;
+  }
+  fillDays();
+  Y.addEventListener('change', fillDays);
+  M.addEventListener('change', fillDays);
+})();
+
+// ══════════════════════════════════════
+// 診断データ
+// ══════════════════════════════════════
+const TYPES = {
+  1: {
+    name: 'リーダータイプ', emoji: '🌟', master: false,
+    personality: {
+      bullets: ['リーダー気質・開拓者', '自分で道を切り開く力がある', '独立心が強い', '新しいことへの挑戦を好む', '強い意志と行動力'],
+      prose: 'あなたは自分の力で道を切り開いていくことが得意なリーダータイプです。きっと「誰かに言われてやるより、自分で動きたい」と感じることが多いのではないでしょうか？その強い意志と行動力は、あなたの大きな強みです。'
+    },
+    spending: {
+      bullets: ['自分の判断でお金を動かしたい', '人に言われて動くより自分で決めたい', '先駆者的な投資・事業への投資に向いている', '勢いで使いすぎてしまうことがある'],
+      prose: 'お金を使うときも「自分で選んで、自分で決める」というスタイルがしっくりくるでしょう。先駆者的な投資やチャレンジに惹かれるのもあなたらしさです。ただ、エネルギッシュな行動力ゆえに、勢いで使いすぎてしまうことも。'
+    },
+    saving: {
+      bullets: ['目標金額を決めると一直線に達成できるタイプ', 'まず全体の10%を先に貯める仕組みを作ると◎', '「この金額を達成したら次のステップへ」という設計が合っている', '自動積立よりも自分で決める積立の方がモチベーションが続く'],
+      prose: '目標を決めたら一直線に向かっていけるのがあなたの強みです。「○歳までに○万円」という具体的な数字があると、燃えるタイプではないでしょうか？まず収入の10%を先に確保する仕組みを作るだけで、貯まる体制が整います。'
+    },
+    advice: {
+      bullets: ['自分で決める力はそのまま活かして！', 'ただし「勢いで使いすぎ」に注意', 'まず全体の10%を先に貯める仕組みを作ると◎', '目標金額を決めると一直線に達成できるタイプ'],
+      prose: 'あなたの「自分で決める力」は本当に素晴らしいです。その力をぜひお金にも向けてみてください。目標を決めて、先に貯めて、残りで楽しむ。そんなシンプルなルールがあなたには合っているはずです。'
+    }
+  },
+  2: {
+    name: '協調タイプ', emoji: '💕', master: false,
+    personality: {
+      bullets: ['協調性・調和を大切にする', '人の気持ちに敏感で思いやりがある', 'サポート役が得意', '争いを好まず穏やか', '直感力が高い'],
+      prose: 'あなたは周りの人の気持ちに自然と寄り添えるやさしさを持った協調タイプです。きっと「みんなが笑顔でいられることが一番大事」と思っている方が多いのではないでしょうか？その思いやりと調和を大切にする姿勢は、まわりの人から深く信頼される理由です。'
+    },
+    spending: {
+      bullets: ['人のためにお金を使うのが好き', '自分より周りを優先しがち', '感情でお金を動かしやすい', 'プレゼントや食事など「人との関係」にお金をかける傾向がある'],
+      prose: 'お金の使い方にも、あなたの「人を大切にする」姿勢がそのまま表れています。つい自分よりも周りを優先してしまうことも多いのではないでしょうか？感情がお金の動きに直結しやすいので、自分の気持ちにも目を向けてみると、よりバランスのとれた使い方ができます。'
+    },
+    saving: {
+      bullets: ['誰かと一緒に貯めると続けやすい', '「自分へのご褒美貯金」を作るのがおすすめ', '貯金仲間やパートナーと目標を共有すると力が発揮される', '「誰かのため」という動機があると継続しやすい'],
+      prose: '一人でコツコツ続けるよりも、誰かと一緒に目標を持つほうがずっと長続きするのがあなたのスタイルです。「誰かのため」という動機があると、思いのほか力を発揮できるかもしれません。「自分へのご褒美貯金」という視点を持つことで、自分自身を満たすことも上手になっていきます。'
+    },
+    advice: {
+      bullets: ['人への気遣いは素晴らしい強み', 'ただし「自分のお金」も大切にして', '「自分へのご褒美貯金」を作るのがおすすめ', '誰かと一緒に目標を立てると継続しやすい'],
+      prose: 'あなたの気遣いと思いやりは本当に素晴らしい才能です。ぜひそれはそのまま大切にしてください。ただ、自分のことを後回しにしすぎると、長い目で見たときに疲れてしまうこともあります。「自分を大切にすることが、まわりを大切にすることにも繋がる」と思えると、お金との関係がもっと楽になっていくはずです。'
+    }
+  },
+  3: {
+    name: 'クリエイタータイプ', emoji: '🎨', master: false,
+    personality: {
+      bullets: ['クリエイティブ・表現力が豊か', '明るく社交的で人を楽しませるのが得意', 'アイデアが次々と湧いてくる', '好奇心旺盛で多才', '言葉や芸術で自己表現するのが好き'],
+      prose: 'あなたはアイデアと表現力に溢れたクリエイタータイプです。きっと「これ面白い！」「やってみたい！」という気持ちが日常的に湧いてくるのではないでしょうか？その明るさと創造力は、まわりの人をわくわくさせる大きな魅力です。'
+    },
+    spending: {
+      bullets: ['楽しいことにお金を使うのが好き', '「体験」や「モノ作り」への投資が多い', '衝動買いしやすい傾向がある', '使う前に「本当に欲しいもの？」と一呼吸置く習慣が大切'],
+      prose: 'お金の使い方も、あなたらしい「楽しさ重視」のスタイルが出やすいでしょう。体験やモノ作りへの投資はあなたの才能を伸ばす大切な出費です。ただ、ワクワクのままに衝動買いしてしまうこともあるかもしれません。使う前に一呼吸置く習慣が、後悔のない使い方に繋がります。'
+    },
+    saving: {
+      bullets: ['楽しみながら貯める仕組みが合っている', '「体験貯金」「学び貯金」など目的別口座が続けやすい', 'ゲーム感覚・チャレンジ感覚が加わると長続きする', '体験・学びへの投資は積極的にOK'],
+      prose: '「楽しくないと続かない」それがあなたの正直なところではないでしょうか。だからこそ、貯金もゲーム感覚やチャレンジ感覚に変えてしまうのがおすすめです。「体験貯金」「学び貯金」など目的別に口座を作るだけで、貯める行為そのものが楽しくなっていくはずです。'
+    },
+    advice: {
+      bullets: ['クリエイティブな才能はそのまま活かして！', '「楽しみながら貯める」仕組みを作るのがおすすめ', '使う前に「本当に欲しいもの？」と一呼吸置く習慣をつけてみては', '体験・学びへの投資は積極的にOK'],
+      prose: 'あなたのクリエイティブな才能と自己表現力は、お金を生み出す力にもなっていきます。「楽しみながら貯める」仕組みを作ることで、才能とお金が両方育っていくイメージを持ってみてください。使う前に「本当に欲しいもの？」と一呼吸置く習慣、ぜひ試してみてくださいね。'
+    }
+  },
+  4: {
+    name: '堅実タイプ', emoji: '🌿', master: false,
+    personality: {
+      bullets: ['堅実・努力家', 'コツコツ積み上げるのが得意', '計画性があり真面目', 'ルールや秩序を大切にする', '安定を好み信頼される存在'],
+      prose: 'あなたはコツコツと着実に積み上げることが得意な堅実タイプです。きっと「しっかり計画を立ててから動きたい」「信頼できることが一番大切」と感じることが多いのではないでしょうか？その真面目さと誠実さは、まわりの人から厚い信頼を得る大きな強みです。'
+    },
+    spending: {
+      bullets: ['衝動買いは少なく堅実な使い方をする', '「使うことへの罪悪感」を感じやすい傾向がある', '楽しみや自分へのご褒美も大切な支出のひとつ', '「使うためのお金」も計画に入れてOK'],
+      prose: 'お金の使い方でも、あなたのしっかりした性格がよく表れています。衝動買いが少なく、計画的な使い方ができるのはあなたの大きな強みです。ただ、ときに「お金を使うこと」自体に罪悪感を覚えてしまうことはないでしょうか？楽しみや自分へのご褒美も、大切な計画のひとつです。'
+    },
+    saving: {
+      bullets: ['計画的にお金を管理するのが得意', '貯金が得意なタイプ', '投資はコツコツ積立型が一番向いている', '家計簿・資産管理ツールを使いこなすのが得意'],
+      prose: '貯金は、実はあなたが一番得意なことかもしれません。計画を立ててコツコツ積み上げるスタイルは、長期的な資産形成に最も向いている力です。家計簿や資産管理ツールを使いこなすことで、あなたの管理能力がさらに輝いていくでしょう。'
+    },
+    advice: {
+      bullets: ['貯める力は最大の強み、そのまま活かして！', '「使うためのお金」も計画に入れてOK', '楽しみや自分へのご褒美も大切な支出のひとつです', '投資はコツコツ積立型が一番向いています'],
+      prose: 'あなたの「コツコツ積み上げる力」は、お金においても本当に強力な武器です。その力を信じて、ぜひそのまま活かしてください。ひとつだけ加えるなら、「使うためのお金」も計画に組み込んでみてください。楽しみや自分へのご褒美も計画の一部にすることで、貯める力がさらに長続きします。'
+    }
+  },
+  5: {
+    name: '冒険家タイプ', emoji: '🌏', master: false,
+    personality: {
+      bullets: ['自由を愛する冒険家', '変化や刺激を好む', '好奇心旺盛でフットワークが軽い', '多才で飽きっぽい一面も', '人との出会いを大切にする'],
+      prose: 'あなたは自由と変化を愛する冒険家タイプです。きっと「同じことをずっと続けるのは苦手」「新しい出会いや体験がやっぱり楽しい」と感じることが多いのではないでしょうか？その軽やかなフットワークと好奇心は、人生をどこまでも豊かにしていく力です。'
+    },
+    spending: {
+      bullets: ['体験・旅行・新しいことへの投資を好む', '「自由のためのお金」という考え方が合っている', '変化を楽しめる資産形成が向いている', '同じことの繰り返しが苦手なので使い方にメリハリがある'],
+      prose: 'お金の使い方にも、あなたの「体験重視」のスタイルがよく表れています。旅行や新しいことへの投資は、あなたの人生の豊かさに直結する大切な出費です。「自由のためのお金」という考え方がしっくりくるのではないでしょうか？使い方にメリハリがあるのも、あなたらしさです。'
+    },
+    saving: {
+      bullets: ['同じことの繰り返しが苦手なので貯金が続きにくい傾向がある', '「自由になるための貯金」と名前をつけると続けやすいかもしれない', '自動積立で「貯まる仕組み」を作っておくのがおすすめ', '飽きたら方法を変えてOK、続けることだけを大切に'],
+      prose: '「貯金が続かない」と感じたことがあるかもしれませんね。それはあなたが飽き性だからではなく、同じことを繰り返すことよりも変化を好む性質があるからです。「自由になるための貯金」と名前をつけることで、目的が見えてぐっと続けやすくなるかもしれません。自動積立で仕組みを作っておくのが、あなたに一番合ったやり方です。'
+    },
+    advice: {
+      bullets: ['体験への投資はあなたの才能を伸ばします', '「自由になるための貯金」と名前をつけると続けやすいかもしれません', '自動積立で「貯まる仕組み」を作っておくのがおすすめです', '飽きたら方法を変えてOK、続けることだけを大切に'],
+      prose: 'あなたの自由への感性と好奇心は、人生を豊かにする宝です。ぜひそのままを活かしながら、お金のことも楽しんでください。「飽きたら方法を変えていい、続けることだけを大切に」という考え方が、きっとあなたに合っているはずです。自由になるためのお金を育てることが、あなたのさらなる冒険を支えてくれます。'
+    }
+  },
+  6: {
+    name: '愛情タイプ', emoji: '❤️', master: false,
+    personality: {
+      bullets: ['思いやりと愛情にあふれる', '家族や仲間を大切にする', '責任感が強く頼りにされる存在', '美しいものや調和を好む', '世話好きで面倒見がいい'],
+      prose: 'あなたは愛情と責任感にあふれた愛情タイプです。きっと「大切な人に喜んでほしい」「みんなのそばで力になりたい」という気持ちが自然と湧いてくるのではないでしょうか？その深い愛情と面倒見の良さは、まわりの人にとってかけがえのない存在感になっています。'
+    },
+    spending: {
+      bullets: ['家族や大切な人のためにお金を使うのが喜び', '自分よりも周りを優先しがち', '愛情表現としてお金を使う傾向がある', '自分へのご褒美も大切な投資のひとつ'],
+      prose: 'お金の使い方を見ると、あなたの「愛情の深さ」がよく伝わってきます。家族や大切な人のために惜しみなく使えるのは、あなたの大きな魅力です。ただ、自分のことは後回しになりがちではないでしょうか？自分へのご褒美も、実はとても大切な投資のひとつです。'
+    },
+    saving: {
+      bullets: ['「誰かのため」という動機で貯める力が発揮される', '「家族のための貯金」など目的を明確にすると続けやすい', '「子どものため」「老後の安心のため」などゴールがあると強い', '家族全体のライフプランで考えると力を発揮できる'],
+      prose: 'あなたが一番力を発揮するのは、「誰かのため」という動機があるときです。「家族のために貯める」「子どものために備える」というゴールがあると、驚くほど力が湧いてくるかもしれません。家族全体のライフプランを考えながら資産形成していくスタイルが、あなたには一番合っているでしょう。'
+    },
+    advice: {
+      bullets: ['大切な人のために使うお金はあなたの一番の強みです', 'ただし「自分を後回しにしすぎない」ことも大切にしてみては？', '「家族のための貯金」など目的を明確にすると続けやすいかもしれません', '自分へのご褒美も大切な投資のひとつです'],
+      prose: '大切な人のために尽くせるあなたの愛情は、本当に素晴らしい才能です。その力をぜひお金にも向けてみてください。ただひとつ伝えたいのは、「自分も大切な人のひとり」だということ。自分を満たすことが、まわりをもっと豊かに愛せることに繋がっていきます。'
+    }
+  },
+  7: {
+    name: '探求タイプ', emoji: '🔍', master: false,
+    personality: {
+      bullets: ['探求心・知的好奇心が強い', '直感力と分析力を兼ね備える', '一人の時間を大切にする', '深く考えてから行動するタイプ', '真実を追い求める哲学者気質'],
+      prose: 'あなたは物事の本質を探ることが大好きな探求タイプです。きっと「表面だけでなく、深いところまで知りたい」「納得してから動きたい」と感じることが多いのではないでしょうか？その深い洞察力と分析力は、長期的に見ると大きな力になっていきます。'
+    },
+    spending: {
+      bullets: ['衝動買いは少なく慎重な使い方をする', '「本当に価値があるか」をじっくり考えてから購入する', '知識・学びへの投資を惜しまない', '良いと確信したものには惜しみなく使える'],
+      prose: 'お金の使い方でも、あなたの慎重で思慮深い性格が出ています。「本当に価値があるか」をじっくり考えてから決断するので、無駄遣いは少ないでしょう。ひとたび「これだ」と確信すれば、惜しみなく投資できる力もあります。知識や学びへの出費は、あなたにとって最高の投資です。'
+    },
+    saving: {
+      bullets: ['データや情報をもとにお金を動かすのが得意', '投資はデータ重視のインデックス投資が向いているかもしれない', '考えすぎて動けなくなることがあるので「まず小さく始める」が大切', '知識を積み上げてから実践するスタイルが合っている'],
+      prose: 'データや情報を丁寧に分析してからお金を動かせるのは、あなたならではの強みです。ただ、考え込みすぎて「なかなか最初の一歩が踏み出せない」ということはないでしょうか？「まず小さく始めてみる」という姿勢が、あなたの力をお金の世界でも活かすコツです。'
+    },
+    advice: {
+      bullets: ['慎重に考える力は資産形成の大きな武器です', '知識への投資は積極的にOK', '考えすぎて動けなくなることがあるので「まず小さく始めてみては？」', '投資はデータ重視のインデックス投資が向いているかもしれません'],
+      prose: 'あなたの「じっくり深く考える力」は、資産形成において本当に大きな武器になります。知識を積み上げることも得意なので、学べば学ぶほど力がついていくタイプです。ぜひ、知識への投資は積極的に。そして「完璧に理解してから動く」より「まず小さく始めてみる」を合言葉にしてみてください。'
+    }
+  },
+  8: {
+    name: '成功タイプ', emoji: '🏆', master: false,
+    personality: {
+      bullets: ['成功志向・目標達成力が高い', 'リーダーシップと決断力がある', 'お金や物質的な豊かさへの意識が高い', '大きな夢を現実にする力がある', '勝負強く自信にあふれている'],
+      prose: 'あなたは目標を高く掲げて力強く進んでいける成功タイプです。きっと「大きな夢を持ちたい」「やるなら本気でやりたい」と感じることが多いのではないでしょうか？その決断力とリーダーシップは、どんな環境でも存在感を放つ強みです。'
+    },
+    spending: {
+      bullets: ['お金を引き寄せる才能がある', '大きな数字に臆せず挑戦できる', '稼ぐ力・増やす力が強い', '「全部か無か」思考になりやすい傾向がある'],
+      prose: 'お金に関して、あなたは特別な引き寄せの才能を持っているかもしれません。大きな数字を目の前にしても臆せず挑戦できる行動力と、稼いで増やしていく感覚はあなたの天性の強みです。ただ、「全部か無か」という考え方になりすぎると、長期的なバランスを崩すこともあるかもしれません。'
+    },
+    saving: {
+      bullets: ['大きな目標に向かって逆算して計画を立てるのが得意', '小さな成功を積み重ねることが長期的な豊かさに繋がる', '投資は積極的にチャレンジしながらリスク管理も大切', '数字での目標設定（「○歳までに○万円」）が合っている'],
+      prose: '大きな目標から逆算して計画を立てるのが、あなたに一番合ったやり方です。「○歳までに○万円」という具体的な数字目標を決めると、あなたの力は一気に加速するでしょう。投資にも積極的に挑戦しながら、リスク管理を忘れないことが長期的な豊かさに繋がります。'
+    },
+    advice: {
+      bullets: ['お金を動かす感覚はあなたの天性の才能です', '大きな目標に向かって逆算して計画を立ててみては？', '「全部か無か」より小さな成功を積み重ねることが長期的な豊かさに繋がるかもしれません', '投資は積極的にチャレンジしながらリスク管理も忘れずに'],
+      prose: 'お金を動かす感覚があなたの天性の才能であることを、ぜひ自覚してください。その才能は、使えば使うほど磨かれていくものです。「全部か無か」より、小さな成功を丁寧に積み重ねていくことが、あなたの夢を確実に現実にしていく道だと思います。'
+    }
+  },
+  9: {
+    name: '博愛タイプ', emoji: '💝', master: false,
+    personality: {
+      bullets: ['博愛主義・思いやりが深い', '人類や社会への貢献意識が高い', '直感力と包容力がある', '古いものを手放し新しいものを受け入れる力がある', '完成・完結を意味する数字'],
+      prose: 'あなたは深い思いやりと包容力を持った博愛タイプです。きっと「自分だけが良ければいい」ではなく「みんなが幸せになれたら」という大きな視野で物事を考えることが多いのではないでしょうか？その社会への貢献意識と直感力は、まわりの人を温かく包む存在感になっています。'
+    },
+    spending: {
+      bullets: ['社会貢献やボランティアにお金を使うことに喜びを感じる', '物質的な豊かさより精神的な豊かさを重視する', '寄付や人助けへの支出が多い傾向がある', '「誰かの役に立つ」使い方に価値を感じる'],
+      prose: 'お金を使うとき、「誰かの役に立つかどうか」が判断基準になることが多いのではないでしょうか？社会貢献や人助けへの支出に、心からの喜びを感じられるのはあなたならではです。ただ、物質的な豊かさよりも精神的な豊かさを優先するあまり、自分の生活基盤が薄くなっていないかも確認してみてください。'
+    },
+    saving: {
+      bullets: ['お金を「循環させるもの」と捉える感覚がある', '「まず自分を満たしてから人に与える」という順番を大切にする', '自分の生活基盤をしっかり整えることが最初のステップ', '社会貢献と資産形成は両立できることを忘れずに'],
+      prose: 'お金を「循環させるもの」として捉えるあなたの感覚は、とても豊かで美しい考え方です。ただ、その循環を健全に続けるためには、まず自分自身を満たすことが大切です。「自分の生活基盤をしっかり整えることが、人への貢献の土台になる」と考えてみてください。'
+    },
+    advice: {
+      bullets: ['お金を循環させる感覚はとても豊かな考え方です', 'ただし「自分の生活基盤」もしっかり整えてみては？', '「まず自分を満たしてから人に与える」という順番を大切にするのが長期的な豊かさに繋がるかもしれません', '社会貢献と資産形成は両立できることを忘れずに'],
+      prose: 'あなたの社会への貢献意識と深い思いやりは、本当に尊いものです。そしてその力をもっと大きく発揮するためにも、まず自分自身の生活基盤を整えてみてください。社会貢献と資産形成は矛盾しません。自分を満たしてから与えることで、より多くの人を幸せにできる存在になっていきます。'
+    }
+  },
+  11: {
+    name: '直感タイプ', emoji: '🌙', master: true,
+    personality: {
+      bullets: ['高い直感力とスピリチュアルな感性', 'インスピレーションを人に伝える力がある', '理想主義で夢を大切にする', '感受性が豊かで繊細な一面も', '人の心を動かすカリスマ性がある'],
+      prose: 'あなたは鋭い直感とスピリチュアルな感性を持つ直感タイプ（マスターナンバー11）です。きっと「なぜかわからないけれど、こっちだと感じる」という経験が多いのではないでしょうか？その人の心を動かすカリスマ性と感受性の豊かさは、あなたにしかない特別な才能です。'
+    },
+    spending: {
+      bullets: ['直感でお金を動かすことが多い', '「ピン！」ときたことへの投資が当たりやすい', '感情の波に乗ってお金を使いすぎることがある', '人の役に立つことへの投資に喜びを感じる'],
+      prose: 'お金の動かし方にも、あなたの直感がよく現れています。「ピン！」ときたことへの投資が実際に当たりやすいのは、あなたならではの才能です。ただ、感情の波が大きいとき、つい使いすぎてしまうこともあるかもしれません。大きな支出の前は少し立ち止まってみる習慣が、バランスを保つ鍵です。'
+    },
+    saving: {
+      bullets: ['大きな支出の前に一晩置いてみることが大切', '「直感×データ」の組み合わせが最強の資産形成スタイルになる', '直感を活かしながらも記録に残す習慣をつけると力が増す', '人を導く才能を活かした仕事への投資は積極的にOK'],
+      prose: 'あなたの直感力をさらに磨くためには、「直感×データ」の組み合わせがとても効果的です。感じたことを記録に残す習慣を持つことで、あなたの直感の精度がさらに高まっていくでしょう。大きな支出の前に一晩置いてみるだけで、選択の質がぐっと上がります。'
+    },
+    advice: {
+      bullets: ['直感力はあなたの最大の武器です', 'ただし大きな支出の前に一晩置いてみては？', '「直感×データ」の組み合わせが最強の資産形成スタイルになるかもしれません', '人を導く才能を活かした仕事への投資は積極的にOK'],
+      prose: 'あなたの直感力は、本当に特別な才能です。その力はそのままに、ぜひお金の世界でも活かしてみてください。「直感×データ」という組み合わせを意識するだけで、あなたの資産形成はもっと力強くなっていくはずです。人を導く才能を活かした仕事への投資も、積極的に進めていきましょう。'
+    }
+  },
+  22: {
+    name: '実現タイプ', emoji: '💫', master: true,
+    personality: {
+      bullets: ['夢を現実にする「夢想家×実現者」', '大きなビジョンを描く力がある', '組織やシステムを作るのが得意', '忍耐力と実行力を兼ね備える', '社会に大きな影響を与える力がある'],
+      prose: 'あなたは大きな夢を現実の形にできる実現タイプ（マスターナンバー22）です。きっと「いつかではなく、いつかを具体的に実現したい」という強い意志をお持ちではないでしょうか？夢を描くだけでなく、仕組みを作って実現していく力は、あなたの最も輝く才能です。'
+    },
+    spending: {
+      bullets: ['大きなビジョンのためにお金を動かすのが得意', 'システム化・仕組み化への投資を好む', 'スケールの大きな資産形成が向いている', '完璧を求めすぎず小さく始めることが大きな夢への近道'],
+      prose: 'お金を動かすとき、あなたは自然と「大きな絵」を描いてから動く傾向があるのではないでしょうか。システム化や仕組み作りへの投資に喜びを感じるのも、あなたらしさです。ただ、完璧を求めるあまり最初の一歩が遅くなることもあるかもしれません。まず小さく始めることが、大きな夢への一番の近道です。'
+    },
+    saving: {
+      bullets: ['長期的な視点でお金を考えられる', '長期投資・不動産などスケールの大きな投資が向いているかもしれない', '大きなビジョンに向かって逆算して資産形成するのが得意', '仕組みを作る才能をお金にも活かしていける'],
+      prose: '長期的な視点でお金を考えられるのは、あなたの大きな強みです。不動産や長期投資など、スケールの大きな資産形成があなたには合っているかもしれません。大きなビジョンから逆算して資産形成する感覚は、あなたが一番力を発揮できるスタイルです。'
+    },
+    advice: {
+      bullets: ['大きなビジョンに向かって逆算して資産形成してみては？', '長期投資・不動産などスケールの大きな投資が向いているかもしれません', '完璧を求めすぎずまず小さく始めることが大きな夢への近道です', '仕組みを作る才能をお金にも活かしていきましょう'],
+      prose: 'あなたの「夢を現実にする力」は、お金の世界でも存分に活かせます。大きなビジョンから逆算して、今日からできることを一歩ずつ積み上げていきましょう。仕組みを作る才能をそのままお金にも向けることで、あなたの夢の実現はどんどん加速していくはずです。'
+    }
+  },
+  33: {
+    name: '奉仕タイプ', emoji: '🌸', master: true,
+    personality: {
+      bullets: ['愛と奉仕の体現者', '人を癒し導くマスターヒーラー', '無条件の愛と深い共感力がある', '教育・芸術・癒しの分野で力を発揮', 'すべての人に平等な愛を注ぐ'],
+      prose: 'あなたは愛と奉仕を体現する奉仕タイプ（マスターナンバー33）です。きっと「誰かを癒したい」「人の力になりたい」という思いが、あなたの自然な姿ではないでしょうか？教育・芸術・癒しの分野でその才能が特に輝く、深い愛と共感力の持ち主です。'
+    },
+    spending: {
+      bullets: ['人を助けること・育てることへの投資に喜びを感じる', '教育・福祉・芸術への支出が多い', '与えすぎて自分が枯渇しないよう注意が必要', 'お金よりも「愛」や「貢献」を優先しがちな傾向がある'],
+      prose: 'お金を使うとき、「誰かのため」「誰かを育てるため」という動機が自然と生まれてくるのではないでしょうか。教育や癒しへの投資に心から喜びを感じられるのは、あなたの純粋な愛の表れです。ただ、与えすぎて自分が枯渇しないように、時々自分自身のことも大切にする視点を持ってみてください。'
+    },
+    saving: {
+      bullets: ['「give & give」より「give & take」のバランスが長期的な豊かさに繋がる', '「自分を満たすこと」も大切な使命のひとつと捉えてみる', '自分の才能を活かした仕事への投資を大切にする', 'まず自分の生活基盤を整えることが人を支える土台になる'],
+      prose: '「与え続けること」があなたの喜びであることはわかっています。でも長期的な豊かさのためには、「give & give」より「give & take」のバランスを意識することがとても大切です。自分を満たすことも、あなたの大切な使命のひとつ。まず自分の生活基盤を整えることが、より多くの人を支える土台になっていきます。'
+    },
+    advice: {
+      bullets: ['人を育てる力はかけがえない才能です', 'ただし「自分を満たすこと」も大切な使命のひとつと捉えてみては？', '「give & give」より「give & take」のバランスが長期的な豊かさに繋がるかもしれません', '自分の才能を活かした仕事への投資を大切にしていきましょう'],
+      prose: '人を育て、癒し、導くあなたの力は、この世界にとってかけがえない才能です。その力をもっと長く、もっと多くの人に届けるためにも、まず自分自身を大切にしてください。「自分を満たすことが、人を満たすことに繋がる」そんな循環を大切にしながら、あなたの才能をお金にも活かしていきましょう。'
+    }
+  }
+};
+
+// ══════════════════════════════════════
+// アコーディオン
+// ══════════════════════════════════════
+function toggleAcc(card) {
+  card.classList.toggle('open');
+}
+
+// ライフパスナンバー計算
+// ══════════════════════════════════════
+function calcLP(y, m, d) {
+  const s = String(y) + String(m).padStart(2,'0') + String(d).padStart(2,'0');
+  let n = s.split('').reduce((a,c) => a + +c, 0);
+  while (n > 9 && n !== 11 && n !== 22 && n !== 33)
+    n = String(n).split('').reduce((a,c) => a + +c, 0);
+  return n;
+}
+
+// ══════════════════════════════════════
+// アニメーション再起動ユーティリティ
+// ══════════════════════════════════════
+function restartAnim(el) {
+  el.style.animation = 'none';
+  void el.offsetHeight;
+  el.style.animation = '';
+}
+
+// ══════════════════════════════════════
+// 診断実行
+// ══════════════════════════════════════
+let ioRef = null;
+
+function diagnose() {
+  const y = +document.getElementById('sel-year').value;
+  const m = +document.getElementById('sel-month').value;
+  const d = +document.getElementById('sel-day').value;
+  const err = document.getElementById('err-msg');
+  if (!y || !m || !d) { err.style.display = 'block'; return; }
+  err.style.display = 'none';
+
+  const num  = calcLP(y, m, d);
+  const type = TYPES[num];
+  if (!type) return;
+
+  // ── コンテンツ設定 ──
+  const numEl = document.getElementById('rNum');
+  numEl.textContent = num;
+  numEl.className = 'r-num-circle' + (num > 9 ? ' two-digit' : '');
+  document.getElementById('rName').textContent  = type.name + '！';
+  document.getElementById('rEmoji').textContent = type.emoji;
+
+  const badge = document.getElementById('rMaster');
+  badge.style.display = type.master ? 'inline-block' : 'none';
+
+  const fillSection = (listId, proseId, section) => {
+    const bullets = Array.isArray(section) ? section : (section.bullets || []);
+    const prose   = Array.isArray(section) ? '' : (section.prose || '');
+    document.getElementById(listId).innerHTML = bullets.map(t => `<li>${t}</li>`).join('');
+    const pw = document.getElementById(proseId);
+    if (prose) {
+      pw.innerHTML = `<hr class="ic-prose-divider"><p class="ic-prose">${prose}</p>`;
+    } else {
+      pw.innerHTML = '';
+    }
+  };
+  fillSection('lPersonality', 'pPersonality', type.personality);
+  fillSection('lSpending',    'pSpending',    type.spending);
+  fillSection('lSaving',      'pSaving',      type.saving);
+  fillSection('lAdvice',      'pAdvice',      type.advice);
+
+  // ── 画面切替 ──
+  document.getElementById('screen-input').classList.remove('active');
+  document.getElementById('screen-result').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'auto' });
+
+  // ── ヒーローアニメ再起動 ──
+  const heroEls = [
+    document.getElementById('rNumWrap'),
+    document.getElementById('rAnnounce'),
+    document.getElementById('rName'),
+    document.getElementById('rEmoji'),
+    document.getElementById('rMaster'),
+    document.getElementById('rHint')
+  ];
+  heroEls.forEach(restartAnim);
+
+  // ── ヒーロー要素にアニメを適用 ──
+  const rNumWrap  = document.getElementById('rNumWrap');
+  const rAnnounce = document.getElementById('rAnnounce');
+  const rName     = document.getElementById('rName');
+  const rEmoji    = document.getElementById('rEmoji');
+  const rHint     = document.getElementById('rHint');
+
+  rNumWrap.style.animation  = 'fadeDown 0.5s ease 0.2s forwards';
+  rAnnounce.style.animation = 'fadeDown 0.5s ease 0.65s forwards';
+  rName.style.animation     = 'popIn 0.65s cubic-bezier(0.34,1.56,0.64,1) 1.05s forwards';
+  rEmoji.style.animation    = 'bounceIn 0.7s cubic-bezier(0.34,1.56,0.64,1) 1.5s forwards';
+  rHint.style.animation     = 'hintPulse 2s ease-in-out 2.2s infinite';
+
+  if (type.master) {
+    document.getElementById('rMaster').style.animation = 'fadeDown 0.4s ease 1.8s forwards';
+  }
+
+  // ── アコーディオン初期状態：性格の特徴だけ開く ──
+  document.querySelectorAll('.ic').forEach(c => c.classList.remove('open'));
+  document.getElementById('cPersonality').classList.add('open');
+
+  // ── カード reveal リセット＆IntersectionObserver ──
+  document.querySelectorAll('.rv').forEach(el => el.classList.remove('in'));
+  if (ioRef) ioRef.disconnect();
+  setTimeout(() => {
+    ioRef = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          ioRef.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.rv').forEach(el => ioRef.observe(el));
+  }, 80);
+}
+
+// ══════════════════════════════════════
+// もう一度診断
+// ══════════════════════════════════════
+function retry() {
+  if (ioRef) { ioRef.disconnect(); ioRef = null; }
+  document.getElementById('screen-result').classList.remove('active');
+  document.getElementById('screen-input').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
