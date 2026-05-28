@@ -205,71 +205,61 @@
        RESULT SCREEN
     ════════════════════════════════════ */
     .r-hero {
-      background: linear-gradient(145deg, #2f5a0d 0%, var(--green) 45%, var(--green-mid) 100%);
-      padding: 48px 24px 68px;
+      min-height: 100dvh;
+      min-height: 100vh;
+      background: linear-gradient(160deg, #1e3d07 0%, #2f5a0d 40%, var(--green) 80%, var(--green-mid) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
       position: relative;
       overflow: hidden;
+      padding: 24px 24px 90px;
     }
     .r-hero::before {
       content: '';
       position: absolute;
-      top: -30%;
+      top: -20%;
       right: -10%;
       width: 70%;
-      height: 170%;
+      height: 160%;
       background: radial-gradient(ellipse, rgba(255,255,255,0.09) 0%, transparent 65%);
       pointer-events: none;
     }
 
-    /* — number — */
-    .r-num-wrap {
-      margin-bottom: 14px;
+    /* — announce — */
+    .r-pre {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.78);
+      margin-bottom: 4px;
+      letter-spacing: 0.12em;
       opacity: 0;
     }
-    .r-num-circle {
-      width: 74px;
-      height: 74px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      border: 2px solid rgba(255,255,255,0.45);
-      color: #fff;
-      font-size: 1.9rem;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(4px);
-      margin-bottom: 6px;
-    }
-    .r-num-circle.two-digit { font-size: 1.4rem; }
-    .r-num-lbl {
+
+    /* — emoji — */
+    .r-emoji {
+      font-size: clamp(100px, 30vh, 220px);
       display: block;
-      font-size: 0.68rem;
-      color: rgba(255,255,255,0.65);
-      letter-spacing: 0.1em;
+      margin: 6px auto 10px;
+      opacity: 0;
+      line-height: 1;
+      filter: drop-shadow(0 8px 32px rgba(0,0,0,0.25));
     }
 
-    /* — announce — */
-    .r-announce { opacity: 0; }
-    .r-pre  {
-      font-size: 0.95rem;
-      color: rgba(255,255,255,0.85);
-      margin-bottom: 4px;
-    }
+    /* — type name — */
     .r-name {
-      font-size: 2.3rem;
+      font-size: clamp(2rem, 9.5vw, 3.5rem);
       font-weight: 700;
       color: #fff;
       line-height: 1.2;
       opacity: 0;
+      text-shadow: 0 4px 24px rgba(0,0,0,0.25);
+      letter-spacing: 0.02em;
+      margin-bottom: 8px;
     }
-    .r-emoji {
-      font-size: 3.4rem;
-      display: block;
-      margin: 10px auto 10px;
-      opacity: 0;
-    }
+
+    /* — master badge — */
     .r-master {
       display: inline-block;
       background: rgba(212,83,126,0.85);
@@ -280,16 +270,56 @@
       border-radius: 20px;
       letter-spacing: 0.08em;
       opacity: 0;
+      margin-bottom: 4px;
     }
+
+    /* — number — */
+    .r-num-wrap {
+      margin-top: 20px;
+      opacity: 0;
+    }
+    .r-num-circle {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      border: 2.5px solid rgba(255,255,255,0.5);
+      color: #fff;
+      font-size: 2.2rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+      margin-bottom: 5px;
+    }
+    .r-num-circle.two-digit { font-size: 1.5rem; }
+    .r-num-lbl {
+      display: block;
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 0.1em;
+    }
+
+    /* — scroll hint button — */
     .r-scroll-hint {
       position: absolute;
-      bottom: 18px;
+      bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
-      color: rgba(255,255,255,0.55);
-      font-size: 0.7rem;
-      letter-spacing: 0.06em;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
       opacity: 0;
+      background: rgba(255,255,255,0.15);
+      border: 1.5px solid rgba(255,255,255,0.38);
+      padding: 11px 32px;
+      border-radius: 30px;
+      white-space: nowrap;
+      backdrop-filter: blur(4px);
+      color: rgba(255,255,255,0.92);
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
     /* — animation keyframes — */
@@ -311,10 +341,21 @@
     }
     @keyframes hintPulse {
       0%   { opacity: 0; transform: translateX(-50%) translateY(0); }
-      15%  { opacity: 0.75; }
-      55%  { opacity: 0.75; transform: translateX(-50%) translateY(5px); }
-      85%  { opacity: 0.5; }
+      15%  { opacity: 0.9; }
+      55%  { opacity: 0.9; transform: translateX(-50%) translateY(5px); }
+      85%  { opacity: 0.6; }
       100% { opacity: 0; transform: translateX(-50%) translateY(0); }
+    }
+    @keyframes boomIn {
+      0%   { opacity: 0; transform: scale(0.05); }
+      55%  { opacity: 1; transform: scale(1.18); }
+      75%  { transform: scale(0.92); }
+      90%  { transform: scale(1.04); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     /* — cards area — */
@@ -477,166 +518,15 @@
     @media (max-width: 420px) {
       .i-hero-title { font-size: 1.28rem; }
       .i-card { padding: 24px 16px 20px; margin-top: -36px; }
-      .r-name { font-size: 1.9rem; }
       .ic-head { padding: 14px 15px; min-height: 50px; }
       .ic.open .ic-body { padding: 14px 15px; }
-    }
-    /* ════════════════════════════════════
-       AUTH SCREEN
-    ════════════════════════════════════ */
-    .pw-wrap {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(160deg, #3B6D11 0%, #5a8f2a 55%, #6fb030 100%);
-      padding: 40px 24px;
-      position: relative;
-      overflow: hidden;
-    }
-    .pw-wrap::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 70% 25%, rgba(255,255,255,0.1) 0%, transparent 55%);
-      pointer-events: none;
-    }
-    .pw-logo {
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
-      color: rgba(255,255,255,0.75);
-      margin-bottom: 10px;
-    }
-    .pw-emoji {
-      font-size: 3rem;
-      display: block;
-      margin-bottom: 14px;
-      animation: float 3.5s ease-in-out infinite;
-    }
-    .pw-title {
-      font-size: 1.45rem;
-      font-weight: 700;
-      color: #fff;
-      text-align: center;
-      line-height: 1.55;
-      margin-bottom: 6px;
-    }
-    .pw-sub {
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.7);
-      text-align: center;
-      margin-bottom: 32px;
-    }
-    .pw-card {
-      background: #fff;
-      border-radius: 20px;
-      padding: 36px 32px 28px;
-      width: 100%;
-      max-width: 380px;
-      box-shadow: 0 8px 36px rgba(0,0,0,0.18);
-    }
-    .pw-card-title {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--green);
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .pw-input-wrap {
-      position: relative;
-      margin-bottom: 10px;
-    }
-    .pw-input {
-      width: 100%;
-      padding: 14px 48px 14px 16px;
-      border: 2px solid var(--border);
-      border-radius: var(--r-sm);
-      font-size: 1rem;
-      font-family: inherit;
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.2s;
-      background: var(--cream);
-    }
-    .pw-input:focus { border-color: var(--green); }
-    .pw-input.err   { border-color: #c0392b; }
-    .pw-toggle {
-      position: absolute;
-      right: 13px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 1.05rem;
-      color: var(--text-sub);
-      padding: 4px;
-      line-height: 1;
-    }
-    .pw-err {
-      font-size: 0.78rem;
-      color: #c0392b;
-      text-align: center;
-      min-height: 1.1em;
-      margin-bottom: 12px;
-      display: none;
-    }
-    .pw-err.show { display: block; }
-    .pw-btn {
-      width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, var(--pink) 0%, var(--pink-dark) 100%);
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 700;
-      border: none;
-      border-radius: var(--r-sm);
-      cursor: pointer;
-      letter-spacing: 0.05em;
-      transition: opacity 0.2s, transform 0.15s;
-      box-shadow: 0 4px 14px rgba(212,83,126,0.35);
-    }
-    .pw-btn:hover  { opacity: 0.88; }
-    .pw-btn:active { transform: scale(0.98); }
-    .pw-contact {
-      font-size: 0.74rem;
-      color: var(--text-light);
-      text-align: center;
-      margin-top: 20px;
-      line-height: 1.8;
     }
   </style>
 </head>
 <body>
 
-<!-- ══════════ AUTH SCREEN ══════════ -->
-<div id="screen-auth" class="screen active">
-  <div class="pw-wrap">
-    <p class="pw-logo">Supple Education Labo</p>
-    <span class="pw-emoji">💰</span>
-    <h1 class="pw-title">お金タイプ診断<br><span style="font-size:0.72em; font-weight:500;">（詳細版）</span></h1>
-    <p class="pw-sub">パスワードを入力してお進みください</p>
-
-    <div class="pw-card">
-      <p class="pw-card-title">🔑 パスワードを入力</p>
-      <div class="pw-input-wrap">
-        <input type="password" id="pw-input" class="pw-input"
-               placeholder="パスワード"
-               oninput="clearPwErr()"
-               onkeydown="if(event.key==='Enter')checkPw()">
-        <button class="pw-toggle" type="button" onclick="togglePwVis()" id="pw-toggle-btn" aria-label="表示切替">👁</button>
-      </div>
-      <p class="pw-err" id="pw-err">パスワードが違います</p>
-      <button class="pw-btn" onclick="checkPw()">進む →</button>
-      <p class="pw-contact">パスワードをお忘れの方は<br>LINEへお問い合わせください</p>
-    </div>
-  </div>
-</div>
-
-
 <!-- ══════════ INPUT SCREEN ══════════ -->
-<div id="screen-input" class="screen">
+<div id="screen-input" class="screen active">
 
   <div class="i-hero">
     <p class="brand-tag">Supple Education Labo</p>
@@ -678,20 +568,19 @@
 <div id="screen-result" class="screen">
 
   <div class="r-hero">
+    <p class="r-pre" id="rAnnounce">あなたは</p>
+    <span class="r-emoji" id="rEmoji"></span>
+    <div class="r-name" id="rName"></div>
+    <span class="r-master" id="rMaster" style="display:none;">✦ マスターナンバー</span>
     <div class="r-num-wrap" id="rNumWrap">
       <div class="r-num-circle" id="rNum">-</div>
       <span class="r-num-lbl">ライフパスナンバー</span>
     </div>
-    <div class="r-announce" id="rAnnounce">
-      <p class="r-pre">あなたは</p>
-      <div class="r-name" id="rName"></div>
-      <span class="r-emoji" id="rEmoji"></span>
-      <span class="r-master" id="rMaster" style="display:none;">✦ マスターナンバー</span>
-    </div>
-    <span class="r-scroll-hint" id="rHint">▼ 詳細を見る ▼</span>
+    <span class="r-scroll-hint" id="rHint"
+          onclick="document.getElementById('rBody').scrollIntoView({behavior:'smooth'})">詳細を見る ↓</span>
   </div>
 
-  <div class="r-body">
+  <div class="r-body" id="rBody">
     <div class="r-cards">
 
       <div class="ic rv" id="cPersonality">
@@ -752,49 +641,8 @@
 
 
 <script>
-// ══════════════════════════════════════
-// パスワード認証
-// ══════════════════════════════════════
-const PW_STORAGE_KEY = 'sel_mt_auth_v2';
-const PW_CORRECT     = 'moneytype2026';
-
-(function initAuth() {
-  if (localStorage.getItem(PW_STORAGE_KEY) === '1') {
-    document.getElementById('screen-auth').classList.remove('active');
-    document.getElementById('screen-input').classList.add('active');
-  }
-})();
-
-function checkPw() {
-  const val = document.getElementById('pw-input').value;
-  if (val === PW_CORRECT) {
-    localStorage.setItem(PW_STORAGE_KEY, '1');
-    document.getElementById('screen-auth').classList.remove('active');
-    document.getElementById('screen-input').classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'auto' });
-  } else {
-    document.getElementById('pw-err').classList.add('show');
-    document.getElementById('pw-input').classList.add('err');
-    document.getElementById('pw-input').focus();
-  }
-}
-
-function clearPwErr() {
-  document.getElementById('pw-err').classList.remove('show');
-  document.getElementById('pw-input').classList.remove('err');
-}
-
-function togglePwVis() {
-  const inp = document.getElementById('pw-input');
-  const btn = document.getElementById('pw-toggle-btn');
-  if (inp.type === 'password') {
-    inp.type = 'text';
-    btn.textContent = '🙈';
-  } else {
-    inp.type = 'password';
-    btn.textContent = '👁';
-  }
-}
+// 旧パスワード認証データをクリーンアップ
+['sel_mt_auth', 'sel_mt_auth_v2'].forEach(k => localStorage.removeItem(k));
 
 // ══════════════════════════════════════
 // セレクト初期化
@@ -1144,14 +992,14 @@ function diagnose() {
   const rEmoji    = document.getElementById('rEmoji');
   const rHint     = document.getElementById('rHint');
 
-  rNumWrap.style.animation  = 'fadeDown 0.5s ease 0.2s forwards';
-  rAnnounce.style.animation = 'fadeDown 0.5s ease 0.65s forwards';
-  rName.style.animation     = 'popIn 0.65s cubic-bezier(0.34,1.56,0.64,1) 1.05s forwards';
-  rEmoji.style.animation    = 'bounceIn 0.7s cubic-bezier(0.34,1.56,0.64,1) 1.5s forwards';
-  rHint.style.animation     = 'hintPulse 2s ease-in-out 2.2s infinite';
+  rAnnounce.style.animation = 'fadeDown 0.5s ease 0.2s forwards';
+  rEmoji.style.animation    = 'boomIn 0.85s cubic-bezier(0.34,1.56,0.64,1) 0.55s forwards';
+  rName.style.animation     = 'boomIn 0.7s cubic-bezier(0.34,1.56,0.64,1) 1.3s forwards';
+  rNumWrap.style.animation  = 'fadeUp 0.5s ease 1.9s forwards';
+  rHint.style.animation     = 'hintPulse 2.2s ease-in-out 2.4s infinite';
 
   if (type.master) {
-    document.getElementById('rMaster').style.animation = 'fadeDown 0.4s ease 1.8s forwards';
+    document.getElementById('rMaster').style.animation = 'fadeUp 0.4s ease 1.85s forwards';
   }
 
   // ── アコーディオン初期状態：性格の特徴だけ開く ──
