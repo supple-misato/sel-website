@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>親子のお金タイプ診断 | Supple Education Labo</title>
+  <style>
+    :root {
+      --green:       #3B6D11;
+      --green-mid:   #5a8f2a;
+      --green-pale:  #edf3e4;
+      --green-muted: #6b8f4a;
+      --pink:        #D4537E;
+      --pink-dark:   #b8416a;
+      --pink-pale:   #fce8ef;
+      --cream:       #FAFAF7;
+      --text:        #2a2a2a;
+      --text-sub:    #666;
+      --text-light:  #aaa;
+      --border:      #e8e4dd;
+      --shadow:      0 4px 20px rgba(0,0,0,0.08);
+      --shadow-lg:   0 8px 36px rgba(0,0,0,0.13);
+      --r:           16px;
+      --r-sm:        10px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic UI', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ── INPUT SCREEN ── */
+    .i-hero {
+      background: linear-gradient(145deg, #3B6D11 0%, #5a8f2a 65%, #6fb030 100%);
+      padding: 52px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .i-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 30%, rgba(255,255,255,0.1) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .brand-tag { font-size: 0.7rem; color: rgba(255,255,255,0.72); letter-spacing: 0.15em; margin-bottom: 22px; }
+    .i-hero-emoji { font-size: 2.8rem; display: block; margin-bottom: 18px; animation: float 3.5s ease-in-out infinite; }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+    .i-hero-title { font-size: 1.55rem; font-weight: 700; color: #fff; line-height: 1.45; margin-bottom: 6px; }
+    .i-hero-catch {
+      display: inline-block;
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.32);
+      border-radius: 30px;
+      padding: 8px 22px;
+      font-size: 0.83rem;
+      color: rgba(255,255,255,0.94);
+      margin-top: 14px;
+      backdrop-filter: blur(4px);
+    }
+    .i-wave { display: block; width: 100%; line-height: 0; margin-top: -1px; }
+    .i-body { max-width: 520px; margin: 0 auto; padding: 0 16px 56px; }
+    .i-card {
+      background: #fff;
+      border-radius: var(--r);
+      padding: 32px 28px 28px;
+      box-shadow: var(--shadow-lg);
+      margin-top: -50px;
+      position: relative;
+      z-index: 2;
+    }
+    .i-card-title { font-size: 1rem; font-weight: 700; color: var(--green); text-align: center; margin-bottom: 6px; }
+    .i-card-sub { font-size: 0.8rem; color: var(--text-sub); text-align: center; line-height: 1.65; margin-bottom: 24px; }
+    .i-desc {
+      margin: 0 0 26px;
+      padding: 16px 18px;
+      background: var(--green-pale);
+      border-radius: var(--r-sm);
+      border-left: 3px solid var(--green-muted);
+    }
+    .i-desc-body { font-size: 0.8rem; color: var(--text-sub); line-height: 2.0; }
+    .i-desc-body p { margin-bottom: 8px; }
+    .i-desc-body p:last-child { margin-bottom: 0; }
+    .field-group { margin-bottom: 22px; }
+    .field-lbl { display: block; font-size: 0.85rem; font-weight: 700; color: var(--green); margin-bottom: 10px; }
+    .field-lbl-icon { margin-right: 4px; }
+    .date-row { display: flex; align-items: center; gap: 6px; }
+    .date-row select {
+      flex: 1;
+      padding: 12px 28px 12px 12px;
+      border: 2px solid var(--border);
+      border-radius: var(--r-sm);
+      font-size: 0.95rem;
+      color: var(--text);
+      background: #fff;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%233B6D11' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+    }
+    .date-row select:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(59,109,17,0.12); }
+    .date-row select.yr { flex: 2; }
+    .date-row .unit { font-size: 0.82rem; color: var(--text-sub); white-space: nowrap; flex-shrink: 0; }
+    .field-divider { border: none; border-top: 1px dashed var(--border); margin: 24px 0; }
+    .err-msg { color: var(--pink); font-size: 0.78rem; margin-top: 10px; display: none; }
+    .btn-go {
+      width: 100%;
+      margin-top: 24px;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-mid) 100%);
+      color: #fff;
+      border: none;
+      border-radius: var(--r-sm);
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+      box-shadow: 0 4px 18px rgba(59,109,17,0.3);
+      transition: opacity 0.2s, transform 0.1s;
+      font-family: inherit;
+    }
+    .btn-go:hover  { opacity: 0.88; }
+    .btn-go:active { transform: scale(0.98); }
+    .privacy { text-align: center; font-size: 0.72rem; color: var(--text-light); margin-top: 12px; }
+
+    /* ── RESULT HERO ── */
+    .r-hero {
+      min-height: 100dvh;
+      min-height: 100vh;
+      background: linear-gradient(160deg, #1a3606 0%, #2a4f0a 35%, #3B6D11 70%, #4a7e1a 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding: 28px 16px 90px;
+    }
+    .r-hero::before {
+      content: '';
+      position: absolute;
+      top: -20%; right: -10%;
+      width: 70%; height: 160%;
+      background: radial-gradient(ellipse, rgba(255,255,255,0.07) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .r-duo {
+      display: flex;
+      gap: 14px;
+      width: 100%;
+      max-width: 620px;
+      align-items: stretch;
+      justify-content: center;
+    }
+    .r-duo-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 18px 10px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+      min-width: 0;
+    }
+    .r-duo-card.child {
+      background: rgba(212,83,126,0.12);
+      border-color: rgba(212,83,126,0.35);
+    }
+    .r-duo-x {
+      font-size: 1.5rem;
+      color: rgba(255,255,255,0.45);
+      font-weight: 300;
+      align-self: center;
+      flex-shrink: 0;
+      opacity: 0;
+    }
+    .r-pre {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.72);
+      letter-spacing: 0.12em;
+      opacity: 0;
+      margin-bottom: 4px;
+    }
+    .r-emoji {
+      font-size: clamp(52px, 13vw, 88px);
+      display: block;
+      margin: 4px auto 6px;
+      opacity: 0;
+      line-height: 1;
+      filter: drop-shadow(0 6px 18px rgba(0,0,0,0.2));
+    }
+    .r-name {
+      font-size: clamp(1.05rem, 4vw, 1.6rem);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+      opacity: 0;
+      text-shadow: 0 3px 12px rgba(0,0,0,0.2);
+      letter-spacing: 0.02em;
+      word-break: keep-all;
+    }
+    .r-master {
+      display: none;
+      background: rgba(212,83,126,0.85);
+      color: #fff;
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.08em;
+      opacity: 0;
+      margin-top: 4px;
+    }
+    .r-num-wrap { margin-top: 10px; opacity: 0; }
+    .r-num-circle {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.4);
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+      margin-bottom: 4px;
+    }
+    .r-num-circle.two-digit { font-size: 1.05rem; }
+    .r-num-lbl { display: block; font-size: 0.58rem; color: rgba(255,255,255,0.6); letter-spacing: 0.08em; }
+    .r-scroll-hint {
+      position: absolute;
+      bottom: 24px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      opacity: 0;
+      background: rgba(255,255,255,0.15);
+      border: 1.5px solid rgba(255,255,255,0.38);
+      padding: 11px 32px;
+      border-radius: 30px;
+      white-space: nowrap;
+      backdrop-filter: blur(4px);
+      color: rgba(255,255,255,0.92);
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes boomIn {
+      0%   { opacity: 0; transform: scale(0.05); }
+      55%  { opacity: 1; transform: scale(1.15); }
+      75%  { transform: scale(0.93); }
+      90%  { transform: scale(1.03); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes hintPulse {
+      0%,100% { opacity: 0.7; }
+      50%      { opacity: 1; }
+    }
+
+    /* ── RESULT BODY ── */
+    .r-body-header {
+      background: var(--green-pale);
+      padding: 16px 20px;
+      text-align: center;
+      border-bottom: 1px solid #dde8d0;
+    }
+    .r-body-names { font-size: 0.78rem; color: var(--green); font-weight: 700; line-height: 1.7; }
+    .r-body-names .sep { color: var(--pink); margin: 0 4px; }
+    .r-cards { max-width: 560px; margin: 0 auto; padding: 24px 16px 8px; }
+    .rv { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .rv.in { opacity: 1; transform: translateY(0); }
+    .ic { background: #fff; border-radius: var(--r); box-shadow: var(--shadow); margin-bottom: 16px; overflow: hidden; }
+    .ic-head {
+      display: flex; align-items: center; gap: 8px;
+      padding: 16px 20px;
+      font-size: 0.95rem; font-weight: 700; color: #fff;
+      background: var(--green);
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      min-height: 54px;
+    }
+    .ic-head:hover { filter: brightness(1.07); }
+    .ic-head:active { filter: brightness(0.95); }
+    .ic-head .ico { font-size: 1.1rem; flex-shrink: 0; }
+    .ic-head-label { flex: 1; }
+    .ic-chevron { font-size: 0.72rem; flex-shrink: 0; display: inline-block; transition: transform 0.32s ease; opacity: 0.85; }
+    .ic.open .ic-chevron { transform: rotate(90deg); }
+    .ic-body {
+      max-height: 0; overflow: hidden;
+      background: var(--green-pale);
+      padding: 0 20px;
+      transition: max-height 0.45s ease, padding 0.32s ease;
+    }
+    .ic.open .ic-body { max-height: 1200px; padding: 18px 20px; }
+    .ic-body ul { list-style: none; }
+    .ic-body li { font-size: 0.9rem; line-height: 1.82; color: var(--text); padding: 2px 0 2px 20px; position: relative; }
+    .ic-body li::before { content: '✦'; position: absolute; left: 0; color: var(--green-muted); font-size: 0.58rem; top: 8px; }
+    .ic-prose-divider { border: none; border-top: 1px dashed #cdc9c0; margin: 16px 0 14px; }
+    .ic-prose { font-size: 0.84rem; line-height: 2.1; color: #444; white-space: pre-line; }
+    .ic.adv .ic-head { background: var(--pink); }
+    .ic.adv .ic-body { background: var(--pink-pale); }
+    .ic.adv .ic-body li::before { color: var(--pink); }
+    .ic.adv .ic-prose-divider { border-top-color: #e8b8cb; }
+    .btn-retry-wrap { max-width: 560px; margin: 8px auto 0; padding: 0 16px 24px; }
+    .btn-retry {
+      width: 100%; padding: 14px;
+      background: #fff; color: var(--green);
+      border: 2px solid var(--green);
+      border-radius: var(--r-sm);
+      font-size: 0.95rem; font-weight: 700;
+      cursor: pointer; letter-spacing: 0.05em;
+      transition: background 0.2s; font-family: inherit;
+    }
+    .btn-retry:hover  { background: var(--green-pale); }
+    .btn-retry:active { transform: scale(0.98); }
+    .footer { text-align: center; font-size: 0.7rem; color: var(--text-light); padding: 20px 16px; }
+
+    @media (max-width: 440px) {
+      .r-duo { flex-direction: column; gap: 0; }
+      .r-duo-x { padding: 6px 0; font-size: 1.2rem; }
+      .r-duo-card { padding: 16px 12px 14px; border-radius: 14px; }
+    }
+    @media (max-width: 420px) {
+      .i-hero-title { font-size: 1.28rem; }
+      .i-card { padding: 24px 16px 20px; margin-top: -36px; }
+      .ic-head { padding: 14px 15px; min-height: 50px; }
+      .ic.open .ic-body { padding: 14px 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ INPUT SCREEN ══════════ -->
+<div id="screen-input" class="screen active">
+  <div class="i-hero">
+    <p class="brand-tag">Supple Education Labo</p>
+    <span class="i-hero-emoji">👨‍👩‍👧</span>
+    <h1 class="i-hero-title">親子のお金タイプ診断</h1>
+    <span class="i-hero-catch">数秘術で親子のお金タイプがわかります</span>
+  </div>
+  <svg class="i-wave" viewBox="0 0 1200 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,0 C200,64 500,0 750,40 C950,70 1100,16 1200,36 L1200,64 L0,64 Z" fill="#FAFAF7"/>
+  </svg>
+  <div class="i-body">
+    <div class="i-card">
+      <p class="i-card-title">✨ 親子のお金タイプ診断</p>
+      <p class="i-card-sub">お二人の生年月日を入力するだけで<br>それぞれのお金タイプとお子さんへの接し方がわかります。<br>ぜひ、おうちでお金の教育をする際の<br>参考にしてください。</p>
+
+      <div class="i-desc">
+        <div class="i-desc-body">
+          <p>数秘術とは、生年月日の数字が持つ意味をもとにその人の性格や才能を読み解く、古くから伝わる知恵です。</p>
+          <p>親御さんとお子さんそれぞれのライフパスナンバーから、お金との向き合い方やお子さんへの伝え方がわかります。</p>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-lbl"><span class="field-lbl-icon">👤</span>親御さんの生年月日</label>
+        <div class="date-row">
+          <select id="p-year" class="yr"><option value="">年</option></select>
+          <span class="unit">年</span>
+          <select id="p-month"><option value="">月</option></select>
+          <span class="unit">月</span>
+          <select id="p-day"><option value="">日</option></select>
+          <span class="unit">日</span>
+        </div>
+      </div>
+
+      <hr class="field-divider">
+
+      <div class="field-group">
+        <label class="field-lbl"><span class="field-lbl-icon">👧</span>お子さんの生年月日</label>
+        <div class="date-row">
+          <select id="c-year" class="yr"><option value="">年</option></select>
+          <span class="unit">年</span>
+          <select id="c-month"><option value="">月</option></select>
+          <span class="unit">月</span>
+          <select id="c-day"><option value="">日</option></select>
+          <span class="unit">日</span>
+        </div>
+      </div>
+
+      <p class="err-msg" id="err-msg">お二人の生年月日を正しく選択してください</p>
+      <button class="btn-go" onclick="diagnose()">✨ 診断する</button>
+      <p class="privacy">※ 入力された情報は外部に送信・保存されません</p>
+    </div>
+  </div>
+  <footer class="footer">© 2026 Supple Education Labo（株式会社SEL）</footer>
+</div>
+
+
+<!-- ══════════ RESULT SCREEN ══════════ -->
+<div id="screen-result" class="screen">
+
+  <div class="r-hero">
+    <div class="r-duo">
+      <div class="r-duo-card" id="duoParent">
+        <p class="r-pre" id="rPPre">親御さんは</p>
+        <span class="r-emoji" id="rPEmoji"></span>
+        <div class="r-name" id="rPName"></div>
+        <span class="r-master" id="rPMaster">✦ マスターナンバー</span>
+        <div class="r-num-wrap" id="rPNumWrap">
+          <div class="r-num-circle" id="rPNum">-</div>
+          <span class="r-num-lbl">ライフパスナンバー</span>
+        </div>
+      </div>
+
+      <div class="r-duo-x" id="rDuoX">×</div>
+
+      <div class="r-duo-card child" id="duoChild">
+        <p class="r-pre" id="rCPre">お子さんは</p>
+        <span class="r-emoji" id="rCEmoji"></span>
+        <div class="r-name" id="rCName"></div>
+        <span class="r-master" id="rCMaster">✦ マスターナンバー</span>
+        <div class="r-num-wrap" id="rCNumWrap">
+          <div class="r-num-circle" id="rCNum">-</div>
+          <span class="r-num-lbl">ライフパスナンバー</span>
+        </div>
+      </div>
+    </div>
+
+    <span class="r-scroll-hint" id="rHint"
+          onclick="document.getElementById('rBody').scrollIntoView({behavior:'smooth'})">詳細を見る ↓</span>
+  </div>
+
+  <div id="rBody">
+    <div class="r-body-header">
+      <p class="r-body-names" id="rBodyNames"></p>
+    </div>
+
+    <div class="r-cards">
+
+      <div class="ic rv open" id="cParent">
+        <div class="ic-head" onclick="toggleAcc(this.closest('.ic'))">
+          <span class="ico">👤</span>
+          <span class="ic-head-label">① 親御さんのタイプ特徴</span>
+          <span class="ic-chevron">▶</span>
+        </div>
+        <div class="ic-body"><ul id="lParent"></ul><div id="pParent"></div></div>
+      </div>
+
+      <div class="ic rv" id="cChild">
+        <div class="ic-head" onclick="toggleAcc(this.closest('.ic'))">
+          <span class="ico">👧</span>
+          <span class="ic-head-label">② お子さんのタイプ特徴</span>
+          <span class="ic-chevron">▶</span>
+        </div>
+        <div class="ic-body"><ul id="lChild"></ul><div id="pChild"></div></div>
+      </div>
+
+      <div class="ic rv" id="cChildSpend">
+        <div class="ic-head" onclick="toggleAcc(this.closest('.ic'))">
+          <span class="ico">💰</span>
+          <span class="ic-head-label">③ お子さんのお金の使い方の特徴</span>
+          <span class="ic-chevron">▶</span>
+        </div>
+        <div class="ic-body"><ul id="lChildSpend"></ul><div id="pChildSpend"></div></div>
+      </div>
+
+      <div class="ic rv" id="cChildSave">
+        <div class="ic-head" onclick="toggleAcc(this.closest('.ic'))">
+          <span class="ico">🐷</span>
+          <span class="ic-head-label">④ お子さんのお金の貯め方の特徴</span>
+          <span class="ic-chevron">▶</span>
+        </div>
+        <div class="ic-body"><ul id="lChildSave"></ul><div id="pChildSave"></div></div>
+      </div>
+
+      <div class="ic adv rv" id="cAdvice">
+        <div class="ic-head" onclick="toggleAcc(this.closest('.ic'))">
+          <span class="ico">🍀</span>
+          <span class="ic-head-label">⑤ 親からお子さんへのアドバイス</span>
+          <span class="ic-chevron">▶</span>
+        </div>
+        <div class="ic-body"><ul id="lAdvice"></ul><div id="pAdvice"></div></div>
+      </div>
+
+    </div>
+
+    <div class="btn-retry-wrap">
+      <button class="btn-retry" onclick="retry()">↩ もう一度診断する</button>
+    </div>
+  </div>
+
+  <footer class="footer">© 2026 Supple Education Labo（株式会社SEL）</footer>
+</div>
+
+
+<script>
+// ══════════════════════════════════════
+// セレクト初期化
+// ══════════════════════════════════════
+(function () {
+  const now = new Date().getFullYear();
+  function initSelects(yId, mId, dId) {
+    const Y = document.getElementById(yId);
+    const M = document.getElementById(mId);
+    const D = document.getElementById(dId);
+    for (let y = now; y >= 1930; y--) Y.add(new Option(y, y));
+    for (let m = 1; m <= 12; m++) M.add(new Option(m, m));
+    function fillDays() {
+      const y = +Y.value || 2000, m = +M.value || 1;
+      const max = new Date(y, m, 0).getDate(), cur = +D.value;
+      D.innerHTML = '<option value="">日</option>';
+      for (let d = 1; d <= max; d++) D.add(new Option(d, d));
+      if (cur && cur <= max) D.value = cur;
+    }
+    fillDays();
+    Y.addEventListener('change', fillDays);
+    M.addEventListener('change', fillDays);
+  }
+  initSelects('p-year', 'p-month', 'p-day');
+  initSelects('c-year', 'c-month', 'c-day');
+})();
+
+// ══════════════════════════════════════
+// 親御さんタイプデータ
+// ══════════════════════════════════════
+const PARENT_TYPES = {
+  1: { name: 'リーダータイプ', emoji: '🌟', master: false,
+    personality: {
+      bullets: ['リーダー気質・開拓者', '自分で道を切り開く力がある', '独立心が強い', '新しいことへの挑戦を好む', '強い意志と行動力'],
+      prose: 'あなたは自分の力で道を切り開いていくことが得意なリーダータイプです。きっと「誰かに言われてやるより、自分で動きたい」と感じることが多いのではないでしょうか？その強い意志と行動力は、あなたの大きな強みです。'
+    }
+  },
+  2: { name: '協調タイプ', emoji: '💕', master: false,
+    personality: {
+      bullets: ['協調性・調和を大切にする', '人の気持ちに敏感で思いやりがある', 'サポート役が得意', '争いを好まず穏やか', '直感力が高い'],
+      prose: 'あなたは周りの人の気持ちに自然と寄り添えるやさしさを持った協調タイプです。きっと「みんなが笑顔でいられることが一番大事」と思っている方が多いのではないでしょうか？その思いやりと調和を大切にする姿勢は、まわりの人から深く信頼される理由です。'
+    }
+  },
+  3: { name: 'クリエイタータイプ', emoji: '🎨', master: false,
+    personality: {
+      bullets: ['クリエイティブ・表現力が豊か', '明るく社交的で人を楽しませるのが得意', 'アイデアが次々と湧いてくる', '好奇心旺盛で多才', '言葉や芸術で自己表現するのが好き'],
+      prose: 'あなたはアイデアと表現力に溢れたクリエイタータイプです。きっと「これ面白い！」「やってみたい！」という気持ちが日常的に湧いてくるのではないでしょうか？その明るさと創造力は、まわりの人をわくわくさせる大きな魅力です。'
+    }
+  },
+  4: { name: '堅実タイプ', emoji: '🌿', master: false,
+    personality: {
+      bullets: ['堅実・努力家', 'コツコツ積み上げるのが得意', '計画性があり真面目', 'ルールや秩序を大切にする', '安定を好み信頼される存在'],
+      prose: 'あなたはコツコツと着実に積み上げることが得意な堅実タイプです。きっと「しっかり計画を立ててから動きたい」「信頼できることが一番大切」と感じることが多いのではないでしょうか？その真面目さと誠実さは、まわりの人から厚い信頼を得る大きな強みです。'
+    }
+  },
+  5: { name: '冒険家タイプ', emoji: '🌏', master: false,
+    personality: {
+      bullets: ['自由を愛する冒険家', '変化や刺激を好む', '好奇心旺盛でフットワークが軽い', '多才で飽きっぽい一面も', '人との出会いを大切にする'],
+      prose: 'あなたは自由と変化を愛する冒険家タイプです。きっと「同じことをずっと続けるのは苦手」「新しい出会いや体験がやっぱり楽しい」と感じることが多いのではないでしょうか？その軽やかなフットワークと好奇心は、人生をどこまでも豊かにしていく力です。'
+    }
+  },
+  6: { name: '愛情タイプ', emoji: '❤️', master: false,
+    personality: {
+      bullets: ['思いやりと愛情にあふれる', '家族や仲間を大切にする', '責任感が強く頼りにされる存在', '美しいものや調和を好む', '世話好きで面倒見がいい'],
+      prose: 'あなたは愛情と責任感にあふれた愛情タイプです。きっと「大切な人に喜んでほしい」「みんなのそばで力になりたい」という気持ちが自然と湧いてくるのではないでしょうか？その深い愛情と面倒見の良さは、まわりの人にとってかけがえのない存在感になっています。'
+    }
+  },
+  7: { name: '探求タイプ', emoji: '🔍', master: false,
+    personality: {
+      bullets: ['探求心・知的好奇心が強い', '直感力と分析力を兼ね備える', '一人の時間を大切にする', '深く考えてから行動するタイプ', '真実を追い求める哲学者気質'],
+      prose: 'あなたは物事の本質を探ることが大好きな探求タイプです。きっと「表面だけでなく、深いところまで知りたい」「納得してから動きたい」と感じることが多いのではないでしょうか？その深い洞察力と分析力は、長期的に見ると大きな力になっていきます。'
+    }
+  },
+  8: { name: '成功タイプ', emoji: '🏆', master: false,
+    personality: {
+      bullets: ['成功志向・目標達成力が高い', 'リーダーシップと決断力がある', 'お金や物質的な豊かさへの意識が高い', '大きな夢を現実にする力がある', '勝負強く自信にあふれている'],
+      prose: 'あなたは目標を高く掲げて力強く進んでいける成功タイプです。きっと「大きな夢を持ちたい」「やるなら本気でやりたい」と感じることが多いのではないでしょうか？その決断力とリーダーシップは、どんな環境でも存在感を放つ強みです。'
+    }
+  },
+  9: { name: '博愛タイプ', emoji: '💝', master: false,
+    personality: {
+      bullets: ['博愛主義・思いやりが深い', '人類や社会への貢献意識が高い', '直感力と包容力がある', '古いものを手放し新しいものを受け入れる力がある', '完成・完結を意味する数字'],
+      prose: 'あなたは深い思いやりと包容力を持った博愛タイプです。きっと「自分だけが良ければいい」ではなく「みんなが幸せになれたら」という大きな視野で物事を考えることが多いのではないでしょうか？その社会への貢献意識と直感力は、まわりの人を温かく包む存在感になっています。'
+    }
+  },
+  11: { name: '直感タイプ', emoji: '🌙', master: true,
+    personality: {
+      bullets: ['高い直感力とスピリチュアルな感性', 'インスピレーションを人に伝える力がある', '理想主義で夢を大切にする', '感受性が豊かで繊細な一面も', '人の心を動かすカリスマ性がある'],
+      prose: 'あなたは鋭い直感とスピリチュアルな感性を持つ直感タイプ（マスターナンバー11）です。きっと「なぜかわからないけれど、こっちだと感じる」という経験が多いのではないでしょうか？その人の心を動かすカリスマ性と感受性の豊かさは、あなたにしかない特別な才能です。'
+    }
+  },
+  22: { name: '実現タイプ', emoji: '💫', master: true,
+    personality: {
+      bullets: ['夢を現実にする「夢想家×実現者」', '大きなビジョンを描く力がある', '組織やシステムを作るのが得意', '忍耐力と実行力を兼ね備える', '社会に大きな影響を与える力がある'],
+      prose: 'あなたは大きな夢を現実の形にできる実現タイプ（マスターナンバー22）です。きっと「いつかではなく、いつかを具体的に実現したい」という強い意志をお持ちではないでしょうか？夢を描くだけでなく、仕組みを作って実現していく力は、あなたの最も輝く才能です。'
+    }
+  },
+  33: { name: '奉仕タイプ', emoji: '🌸', master: true,
+    personality: {
+      bullets: ['愛と奉仕の体現者', '人を癒し導くマスターヒーラー', '無条件の愛と深い共感力がある', '教育・芸術・癒しの分野で力を発揮', 'すべての人に平等な愛を注ぐ'],
+      prose: 'あなたは愛と奉仕を体現する奉仕タイプ（マスターナンバー33）です。きっと「誰かを癒したい」「人の力になりたい」という思いが、あなたの自然な姿ではないでしょうか？教育・芸術・癒しの分野でその才能が特に輝く、深い愛と共感力の持ち主です。'
+    }
+  }
+};
+
+// ══════════════════════════════════════
+// お子さんタイプデータ
+// ══════════════════════════════════════
+const CHILD_TYPES = {
+  1: { name: 'リーダータイプ', emoji: '🌟', master: false,
+    personality: {
+      bullets: ['リーダー気質で自分でやりたがる', '「自分で決めたい」という意志が強い', '新しいことへの挑戦を楽しめる', '独立心が強く、自分のペースで動きたい', '負けず嫌いでやる気がある'],
+      prose: 'このお子さんは「自分でやりたい！」という気持ちがとても強い、生まれながらのリーダータイプです。きっと「先生に言われる前に自分でやる」「自分のやり方でやってみたい」という姿を見せることが多いのではないでしょうか？その強い意志とやる気は、大きな才能です。'
+    },
+    spending: {
+      bullets: ['自分で選んで自分で決めたがる', '欲しいものを一度決めたら一気に使おうとする', '周りに流されず、自分の価値観でお金を使う', '勢いで使いすぎてしまうことがある'],
+      prose: 'お小遣いを渡したとき、「自分で選ぶ！」と真っ先に言いそうなのがこのタイプです。自分の判断でお金を使いたがるのはとても素晴らしいことですが、勢いで使いすぎてしまうこともあるかもしれません。'
+    },
+    saving: {
+      bullets: ['目標を決めたら一直線に貯められる', '「○円貯めたら○○を買う」という設計が合っている', '達成感が次のやる気につながる', '人から言われるより自分で決めた目標の方が続く'],
+      prose: '「○円貯めたら○○ゲームを買う！」という具体的な目標があると、このお子さんはとても強いです。自分で決めた目標に向かって一直線に進む力は、大人になっても大きな武器になります。'
+    },
+    advice: {
+      bullets: ['「自分で決める」経験をどんどん積ませてあげよう', '使う前に「本当に必要？」と一緒に考える習慣をつけると◎', '目標金額を一緒に決めて、達成したらしっかり認めてあげよう', '先に貯める分を分けておく仕組みを一緒に作ろう'],
+      prose: 'このお子さんの「自分で決める力」はそのまま伸ばしてあげてください。ただ、勢いで使いすぎてしまったときは責めるのではなく「次はどうしようか？」と一緒に考えてみてください。目標を自分で決めて達成する体験を重ねることが、将来のお金の力に直結していきます。'
+    }
+  },
+  2: { name: '協調タイプ', emoji: '💕', master: false,
+    personality: {
+      bullets: ['友達の気持ちをよく読める、やさしい子', '争いが苦手で、みんなと仲良くしたい', 'サポート役が得意で、縁の下の力持ち', '穏やかで、人から好かれやすい', '直感で友達の変化に気づける'],
+      prose: 'このお子さんは、クラスの雰囲気を和らげてくれる、やさしさにあふれた協調タイプです。きっと「あの子、元気ないな」とそっと気にかけたり、みんながうまくいくように動いてくれたりすることが多いのではないでしょうか？その思いやりの深さは、大きな才能です。'
+    },
+    spending: {
+      bullets: ['友達へのプレゼントやおやつに使いたがる', '自分より友達を優先してお金を使いがち', '「みんなで楽しむ」ためにお金を使うのが好き', '断れずに使いすぎてしまうことがある'],
+      prose: 'お小遣いを渡すと、自分よりも友達のために使おうとするやさしさが出やすいタイプです。人のために使えるのは素晴らしいことですが、気づいたら自分の分がなくなっていた…ということにならないよう、一緒に考えてあげてください。'
+    },
+    saving: {
+      bullets: ['「誰かのため」という動機があると貯めやすい', '家族や友達と一緒に貯金の目標を作ると続けやすい', '「自分へのご褒美貯金」という視点を持つと自分を大切にできる', '一人でコツコツより、誰かと一緒の方が続く'],
+      prose: '「お母さんの誕生日プレゼントのために貯める」というような動機があると、このお子さんはとても頑張れます。誰かのためという力を活かしながら、自分のためにも貯められるようになっていくと理想的です。'
+    },
+    advice: {
+      bullets: ['「自分のためにお金を使っていいんだよ」と伝えてあげよう', '友達に流されてお金を使いすぎていないか、そっと見守ろう', '「自分へのご褒美貯金」を一緒に作ってみよう', 'お金の使い方を「自分も大切にできているか？」で振り返る習慣を'],
+      prose: 'このお子さんのやさしさと思いやりはそのまま大切に育ててあげてください。ただ、「自分も大切な人のひとり」ということを伝えてあげることが大切です。自分を満たすことが、まわりをもっと大切にすることにつながると知ると、お金との関係がもっとバランスよくなっていきます。'
+    }
+  },
+  3: { name: 'クリエイタータイプ', emoji: '🎨', master: false,
+    personality: {
+      bullets: ['アイデアが次々と湧いてくる創造力豊かな子', '明るく元気で、場を盛り上げるのが得意', '絵を描いたり、工作したり、表現することが好き', '好奇心旺盛でいろんなことに興味を持つ', 'しゃべるのが得意で、人を楽しませる才能がある'],
+      prose: 'このお子さんは、まわりをわくわくさせる創造力にあふれたクリエイタータイプです。きっと「こんなものを作りたい！」「こんなアイデアがある！」という言葉が日常的に飛び出してくるのではないでしょうか？その豊かな表現力と明るさは、大きな才能です。'
+    },
+    spending: {
+      bullets: ['楽しそう！と思ったらすぐ使いたがる', '体験・工作・アート系への出費が多い', '衝動買いしやすく、計画なく使ってしまうことがある', '「これが欲しい！」という気持ちが強いとき、止まれない'],
+      prose: 'お小遣いを渡すと、楽しそうなものや気になるものにすぐ使ってしまいやすいタイプです。使うこと自体は悪いことではありませんが、「本当に欲しかったもの？」と後から振り返る習慣をつけてあげると力がつきます。'
+    },
+    saving: {
+      bullets: ['楽しみながら貯める仕組みが合っている', '「体験貯金」「つくる貯金」など名前をつけると続けやすい', 'ゲーム感覚やチャレンジ感覚があると頑張れる', '目的が「体験・学び」だと積極的に貯めやすい'],
+      prose: '「このお金で○○を体験する！」という楽しい目標があると、このお子さんはとても意欲的になります。貯金をゲームや挑戦のように工夫してあげると、楽しみながら続けられるようになります。'
+    },
+    advice: {
+      bullets: ['創造力を活かす体験・学びへの投資は積極的に応援しよう', '使う前に「本当に欲しいもの？」と一呼吸置く習慣をつけよう', '「楽しみながら貯める」仕組みを一緒に考えよう', '衝動買いを責めず、「どうだった？」と振り返りの機会にしよう'],
+      prose: 'このお子さんのクリエイティブな才能と表現力はそのまま大切に育ててください。楽しいことへの好奇心はそのままに、「使う前にひと呼吸」という習慣だけ一緒に作ってあげると、お金との関係がぐっとバランスよくなっていきます。'
+    }
+  },
+  4: { name: '堅実タイプ', emoji: '🌿', master: false,
+    personality: {
+      bullets: ['コツコツと積み上げることが得意な努力家', '計画を立てて、その通りに動くのが好き', '真面目で責任感が強く、信頼される', 'ルールを守ることを大切にする', '急な変化や失敗に不安を感じやすい一面も'],
+      prose: 'このお子さんは、コツコツと積み上げることができる堅実タイプです。きっと「決めたことはちゃんとやりたい」「計画通りに進めたい」という気持ちを持っていることが多いのではないでしょうか？その真面目さと誠実さは、まわりからの信頼につながる大きな強みです。'
+    },
+    spending: {
+      bullets: ['衝動買いが少なく、慎重な使い方をする', '「使うこと」に罪悪感を感じやすい傾向がある', '必要なもの・価値があるものにしっかり使える', '楽しみや自分へのご褒美を後回しにしがち'],
+      prose: 'お小遣いをもらっても、むやみに使わず大切に持っているのがこのタイプの特徴です。ただ、「使ってもいいのかな」と感じてしまい、楽しみのためのお金を使えないことも。お金は使うためにもあることを、安心して体験させてあげましょう。'
+    },
+    saving: {
+      bullets: ['計画的にお金を管理することが得意', '貯金が自然とできるタイプ', 'コツコツ積み立てる方法が最も向いている', '記録をつけることで達成感を得やすい'],
+      prose: 'このお子さんは、お小遣い帳をつけたり、計画的に貯めたりすることがとても得意です。貯金そのものが苦にならないので、「貯める習慣」はとても身につきやすいでしょう。'
+    },
+    advice: {
+      bullets: ['「貯める力」はそのまま大いに認めてあげよう', '「楽しみのためのお金」も計画に入れていいと伝えよう', '失敗を恐れすぎないよう、「やってみることが大事」と伝えよう', 'お小遣い帳やお金の記録を一緒に楽しもう'],
+      prose: 'このお子さんのコツコツ積み上げる力と計画性はとても大切な才能です。ただ、「使うことへの罪悪感」が強くなりすぎないよう、「楽しむためのお金も大事だよ」とさりげなく伝えてあげてください。自分へのご褒美を安心して使える経験が、豊かなお金観につながっていきます。'
+    }
+  },
+  5: { name: '冒険家タイプ', emoji: '🌏', master: false,
+    personality: {
+      bullets: ['自由を愛する、エネルギッシュな冒険家', '変化や刺激が大好きで、新しいことにすぐ飛びつく', 'フットワークが軽く、行動力がある', '多才で好奇心が強い反面、飽きっぽい一面も', '人との出会いや体験から多くを学ぶタイプ'],
+      prose: 'このお子さんは、自由とワクワクを求めて進んでいく冒険家タイプです。きっと「新しいことやってみたい！」「ここに行きたい！」という気持ちが次々と湧いてくるのではないでしょうか？その行動力と好奇心は、人生をどこまでも豊かにしていく力です。'
+    },
+    spending: {
+      bullets: ['体験・旅行・新しいものへの出費を好む', '「今これが欲しい！」という衝動が強い', '同じものを長く使い続けることが苦手', '使い方にメリハリがあり、興味があるものには惜しみなく使う'],
+      prose: 'お小遣いを渡すと、体験や新しいものに真っ先に使いたがるのがこのタイプです。体験にお金を使うこと自体はとても良いことですが、「今すぐ欲しい」という衝動に気づく練習も少しずつしていけると良いでしょう。'
+    },
+    saving: {
+      bullets: ['同じことの繰り返しが苦手で、貯金が続きにくい傾向がある', '「自由になるための貯金」など名前と目的をつけると続けやすい', '仕組みを作ってしまえば自動的に貯まる方法が合っている', '飽きたらやり方を変えてOK、続けることだけを意識する'],
+      prose: '「このお金で○○の体験をする！」という自由な目標があると、このお子さんはとても張り切ります。貯金が続かないのは飽き性だからではなく、変化を好む性質があるから。方法を変えながら続けることを応援してあげましょう。'
+    },
+    advice: {
+      bullets: ['体験への投資は積極的に応援しよう', '「自由になるための貯金」という考え方を一緒に育てよう', '貯金の方法が変わっても「続けていること」をほめよう', '衝動買いしたときは責めず「どうだった？」と振り返ろう'],
+      prose: 'このお子さんの自由への感性と好奇心は本当に大切な才能です。貯金が苦手でも、「なんのために貯めるか」という目的さえ明確にすれば、驚くほど頑張れます。変化を楽しみながらお金と付き合う方法を一緒に見つけてあげてください。'
+    }
+  },
+  6: { name: '愛情タイプ', emoji: '❤️', master: false,
+    personality: {
+      bullets: ['家族・友達思いで、愛情表現が豊か', '責任感が強く、頼まれたことを一生懸命やる', '美しいものや調和のとれた環境が好き', '世話好きで、困っている人を放っておけない', '自分より家族や友達を優先しがち'],
+      prose: 'このお子さんは、愛情と責任感にあふれた愛情タイプです。きっと「家族のために何かしたい」「友達が喜んでくれたら嬉しい」という気持ちがとても自然に湧いてくるのではないでしょうか？その深い愛情と世話好きな姿は、まわりから大切にされる存在感になっています。'
+    },
+    spending: {
+      bullets: ['家族や友達へのプレゼントにお金を使いたがる', '自分のことよりも大切な人のために使うのが嬉しい', '愛情表現としてお金を使う傾向がある', '自分へのご褒美を後回しにしやすい'],
+      prose: 'お小遣いを渡すと、家族の誕生日プレゼントや友達へのおやつなど、大切な人のために使おうとするのがこのタイプです。人への愛情表現にお金を使えるのは素晴らしいですが、自分のことも大切にできるよう一緒に考えてあげましょう。'
+    },
+    saving: {
+      bullets: ['「家族のため」「大切な人のため」という動機で貯める力が出る', '「○○のプレゼント貯金」など目的を明確にすると続けやすい', '家族と一緒に目標を立てると力を発揮できる', '自分のためだけの目標より、誰かのための目標の方が燃える'],
+      prose: '「お母さんの誕生日プレゼントのために貯める」「家族旅行のために一緒に貯める」という動機があると、このお子さんはとても頑張れます。誰かのためという気持ちを上手に活かした貯金の仕組みが合っています。'
+    },
+    advice: {
+      bullets: ['「自分のためにも使っていいんだよ」と伝え続けよう', '大切な人のための貯金と、自分のための貯金の両方を作ってあげよう', '家族で一緒にお金の目標を立てる時間を作ろう', '自分を大切にすることが、まわりをもっと大切にすることにつながると教えよう'],
+      prose: 'このお子さんの愛情深さと責任感は本当に素晴らしい才能です。ただひとつ伝えてあげたいのは、「自分も大切な人のひとり」だということ。自分のためのお金を安心して使える体験が、長い目で見たときにバランスの良いお金観を育てていきます。'
+    }
+  },
+  7: { name: '探求タイプ', emoji: '🔍', master: false,
+    personality: {
+      bullets: ['「なぜ？」「どうして？」と深く考える知的好奇心旺盛な子', '一人で集中して取り組む時間が大切', '深く考えてから動くので、慎重な面がある', '好きなことにはとことん深く掘り下げる', '直感力が高く、本質を見抜く力がある'],
+      prose: 'このお子さんは、物事の本質を探ることが大好きな探求タイプです。きっと「なんで？」「もっと知りたい」という言葉が自然と出てきたり、興味を持ったことをとことん調べたりすることが多いのではないでしょうか？その深い洞察力と集中力は、大きな才能です。'
+    },
+    spending: {
+      bullets: ['衝動買いが少なく、じっくり考えてから使う', '本・図鑑・学べるものへのお金の使い方を好む', '「本当に価値があるか？」を自分なりに考えてから決める', '確信を持ったものには惜しみなく使える'],
+      prose: 'お小遣いを渡しても、すぐに使わずに「本当にこれでいいか」じっくり考えるのがこのタイプです。知識や学びにお金を使うのが大好きで、図鑑や本を選ぶときの目が真剣になるのが特徴です。'
+    },
+    saving: {
+      bullets: ['データや記録をもとに考える管理スタイルが合っている', 'お小遣い帳や記録をつけることで力を発揮する', '考えすぎてなかなか動き出せないことがある', '知識を積んでから実践するスタイルが向いている'],
+      prose: 'お小遣い帳をつけてデータを見ながら管理するスタイルがとても合っています。ただ、「完璧に理解してから動こう」と考えすぎてしまい、最初の一歩が遅くなることもあります。「まず小さく試してみよう」という体験を大切にしてあげましょう。'
+    },
+    advice: {
+      bullets: ['知識・学びへの投資は積極的に応援しよう', 'お小遣い帳など記録する楽しさを一緒に見つけよう', '考えすぎて動けないときは「まず小さく試してみよう」と背中を押そう', '「なぜ？」という好奇心を大切に、お金の仕組みも一緒に学ぼう'],
+      prose: 'このお子さんの深く考える力と知的好奇心は本当に大切な才能です。知識への投資は積極的に応援してあげてください。「完璧にわかってから動く」より「まず小さく始めてみる」という体験を少しずつ積み重ねることが、将来の大きな力になっていきます。'
+    }
+  },
+  8: { name: '成功タイプ', emoji: '🏆', master: false,
+    personality: {
+      bullets: ['目標達成への意欲が高く、負けず嫌い', 'リーダーシップがあり、自信にあふれている', 'お金や数字への関心が早くから出てくる', '大きな夢を持ち、実現しようとするエネルギーがある', '勝負強く、プレッシャーに強い'],
+      prose: 'このお子さんは、高い目標に向かって力強く進んでいける成功タイプです。きっと「絶対に達成する！」「もっと大きくやりたい！」という強いエネルギーを持っていることが多いのではないでしょうか？その決断力とリーダーシップは、どんな場でも輝く強みです。'
+    },
+    spending: {
+      bullets: ['お金への関心が高く、使い方を自分なりに考えられる', '大きな目標のためにお金を使うことに積極的', '「全部か無か」という考え方になりやすい', '稼いだり増やしたりすることへの関心が早くから芽生える'],
+      prose: 'お小遣いをもらうと、「これをどう使えば得か」「どうすれば増えるか」と考えるのがこのタイプです。お金への意識の高さはとても頼もしいですが、「全部うまくいくはず」と大きく動きすぎないよう、小さな成功体験を積み重ねることを大切にしてあげましょう。'
+    },
+    saving: {
+      bullets: ['大きな目標から逆算して考えるスタイルが合っている', '「○円貯めたら○○ができる」という数字目標が効果的', '小さな成功を積み重ねることが長期的な力になる', '数字で管理することが好きで得意'],
+      prose: '「○円貯めたら○○を買う！」という具体的な数字目標を持つと、このお子さんはとても力を発揮します。大きな夢に向かって逆算して計画を立てる感覚は、大人になっても大きな武器になっていきます。'
+    },
+    advice: {
+      bullets: ['大きな夢と目標を一緒に応援しよう', '「小さな成功を積み重ねること」の大切さを伝えよう', 'お金の仕組みや増やし方に興味を持ったら一緒に学ぼう', 'うまくいかなかったときも「次はどうするか」を一緒に考えよう'],
+      prose: 'このお子さんのお金への意識の高さと達成意欲は本当に頼もしい才能です。大きな夢をしっかり応援しながら、「全部か無か」ではなく「小さな成功を積み重ねる」という視点を育てていくことが、長期的な豊かさへの道になっていきます。'
+    }
+  },
+  9: { name: '博愛タイプ', emoji: '💝', master: false,
+    personality: {
+      bullets: ['思いやりが深く、人の痛みに共感できる', '「みんなが幸せになってほしい」という気持ちが強い', '直感力と包容力があり、人を受け入れる力がある', '社会のことや「なぜ不公平があるのか」を気にする', '古いものを大切にしつつ、新しいものも受け入れられる'],
+      prose: 'このお子さんは、深い思いやりと包容力を持った博愛タイプです。きっと「困っている人を助けたい」「みんながもっと仲良くなればいいのに」という気持ちが自然と湧いてくるのではないでしょうか？その社会への貢献意識と直感力は、まわりの人を温かく包む存在感になっています。'
+    },
+    spending: {
+      bullets: ['困っている人や社会のために使いたがる', '物質的なものより精神的な価値を大切にする', '「誰かの役に立つ」使い方に喜びを感じる', '自分のことを後回しにして人に与えすぎることがある'],
+      prose: 'お小遣いを渡すと、寄付したい・困っている友達を助けたいと言い出すのがこのタイプです。人のために使えるのはとても素晴らしいことですが、自分の生活も大切にできるよう、バランスを一緒に考えてあげましょう。'
+    },
+    saving: {
+      bullets: ['「まず自分を満たしてから人に与える」という順番を学ぶことが大切', 'お金を「循環するもの」として前向きに捉えられる', '自分の基盤を整えることが、人への貢献の土台になると知ると強くなる', '社会貢献と自分の豊かさは両立できることを体験させよう'],
+      prose: '「まず自分のお小遣いを確保してから、余った分で人のために使う」という順番を体験させてあげることが、このお子さんの豊かさを育てるポイントです。人への貢献意識はそのままに、自分の基盤づくりの大切さを少しずつ伝えていきましょう。'
+    },
+    advice: {
+      bullets: ['社会への貢献意識はそのまま大切に育てよう', '「自分を満たすことが、人を満たすことにつながる」と伝えよう', '自分のためのお金を安心して使う体験を作ってあげよう', '寄付や社会貢献活動を一緒に経験するのも◎'],
+      prose: 'このお子さんの深い思いやりと社会への意識は、本当に尊い才能です。「まず自分」という順番を教えることは、決して自分勝手なことを教えることではありません。自分を大切にすることが、より多くの人を幸せにできる力につながるのだと、ぜひ一緒に体験させてあげてください。'
+    }
+  },
+  11: { name: '直感タイプ', emoji: '🌙', master: true,
+    personality: {
+      bullets: ['直感力が高く、「なんとなくそう感じる」が当たりやすい', '感受性が豊かで、繊細な一面がある', '理想主義で、夢や理想をとても大切にする', '人の心の動きをよく感じ取れる', 'カリスマ性があり、自然と人が集まってくる'],
+      prose: 'このお子さんは、鋭い直感と豊かな感受性を持つ直感タイプ（マスターナンバー11）です。きっと「なんかこっちの方がいい気がする」という感覚がよく当たったり、誰かの気持ちを言葉の前に感じ取ったりすることが多いのではないでしょうか？その特別な感性は、あなたのお子さんにしかない才能です。'
+    },
+    spending: {
+      bullets: ['「ピン！ときた」ものへのお金の使い方が当たりやすい', '直感でお金を動かすことが多い', '感情の波が大きいとき、使いすぎてしまうことがある', '人の役に立つことへのお金の使い方に喜びを感じる'],
+      prose: 'お小遣いを渡したとき、「これ！」という感覚で選ぶのがこのタイプです。その直感は実際によく当たりますが、気分が高ぶっているときに使いすぎてしまうこともあります。大きな使い道の前に少し立ち止まる習慣を一緒に育てていきましょう。'
+    },
+    saving: {
+      bullets: ['直感と記録を組み合わせると貯める力が増す', '「大きな出費の前に一晩置く」習慣がバランスを生む', '感じたことを記録することで直感の精度が上がる', '人を導く才能を活かした夢のための貯金が合っている'],
+      prose: '「これを買うかどうか」と迷ったときに一晩置いてみる習慣をつけると、このお子さんの直感の精度がさらに高まります。直感を活かしながら、「感じたことを書き留める」という記録の習慣も一緒に育ててあげましょう。'
+    },
+    advice: {
+      bullets: ['「ピン！ときた」という直感を大切にしてあげよう', '大きな買い物の前は「一晩置いてみよう」を習慣に', '感受性の豊かさを否定せず、ありのまま受け止めてあげよう', '夢や理想を笑わずに一緒に大切にしてあげよう'],
+      prose: 'このお子さんの直感力と感受性の豊かさは、本当に特別な才能です。否定せず、「その感覚、大事にしようね」と伝え続けてあげてください。「直感＋少し立ち止まる」という習慣を一緒に育てることで、お金との付き合い方もどんどん上手になっていきます。'
+    }
+  },
+  22: { name: '実現タイプ', emoji: '💫', master: true,
+    personality: {
+      bullets: ['大きな夢を描き、それを実現しようとする力がある', '仕組みを作るのが得意で、計画性がある', '忍耐力と実行力を兼ね備えている', '「いつかじゃなく、本当に実現したい」という意志が強い', '社会や人に大きな影響を与えたいという気持ちがある'],
+      prose: 'このお子さんは、大きな夢を現実の形にしていける実現タイプ（マスターナンバー22）です。きっと「将来こんなことをしたい」「こんな仕組みを作りたい」という具体的なビジョンを持っていることが多いのではないでしょうか？夢を描くだけでなく、実現する力を持っているのがこのお子さんの最大の才能です。'
+    },
+    spending: {
+      bullets: ['大きな目的のためにお金を動かす感覚が自然にある', '仕組みを作るためのものや学びへの投資を好む', '完璧を求めすぎて、なかなか動き出せないことがある', 'スケールの大きな使い方・考え方が向いている'],
+      prose: 'お小遣いをもらったとき、「これで○○の仕組みを作れないか」「大きな目標に使えないか」と考えるのがこのタイプです。スケールの大きな発想は素晴らしいですが、完璧を求めすぎて最初の一歩が遅くなることもあります。小さく始める体験を大切にしてあげましょう。'
+    },
+    saving: {
+      bullets: ['大きなビジョンから逆算して貯める計画が得意', '長期的な視点でお金を考えられる', '仕組みを作る才能をお金の管理にも活かせる', '完璧な計画を作ろうとして動けなくなることがある'],
+      prose: '「○年後に○円貯めて○○を実現する」という長期的な計画を立てるのが、このお子さんに最も合ったスタイルです。大きなビジョンを持ちながら、「まず小さく始めること」を一緒に体験させてあげることが大切です。'
+    },
+    advice: {
+      bullets: ['大きな夢とビジョンをしっかり応援しよう', '「完璧じゃなくていい、まず小さく始めよう」と伝えよう', '長期的な目標を一緒に立てる時間を作ろう', '仕組みを作る才能をお金の管理にも活かせると伝えよう'],
+      prose: 'このお子さんの「夢を現実にする力」は本当に特別な才能です。大きなビジョンを笑わずに一緒に大切にしてあげてください。「完璧を目指しすぎず、まず小さく一歩」を繰り返すことで、どんな大きな夢も着実に近づいていくことを、親子で一緒に体験していきましょう。'
+    }
+  },
+  33: { name: '奉仕タイプ', emoji: '🌸', master: true,
+    personality: {
+      bullets: ['愛情深く、人を癒す力がある', '共感力がとても高く、人の気持ちに寄り添える', '教えることや、誰かの役に立つことに喜びを感じる', 'すべての人に平等にやさしくできる', '感受性が豊かで、芸術や表現にも才能が出やすい'],
+      prose: 'このお子さんは、愛と奉仕を自然と体現できる奉仕タイプ（マスターナンバー33）です。きっと「誰かを助けたい」「みんなに笑顔でいてほしい」という気持ちが、いつでも自然と湧いてくるのではないでしょうか？教育・芸術・癒しの分野でその才能が特に輝く、深い愛と共感力の持ち主です。'
+    },
+    spending: {
+      bullets: ['人を助けることや誰かを喜ばせることにお金を使いたがる', '与えすぎて自分の分がなくなってしまうことがある', 'お金よりも「愛情」や「貢献」を優先する気持ちが強い', '教育・アート・癒しに関係するものへの出費が多い'],
+      prose: 'お小遣いをもらっても、友達にあげたり、困っている人を助けたりすることを優先するのがこのタイプです。与えることへの喜びはとても純粋で美しいですが、自分の分を確保することも大切だと、少しずつ教えてあげましょう。'
+    },
+    saving: {
+      bullets: ['「give & give」より「give & take」のバランスを学ぶことが大切', '「自分を満たすことも大切な役割のひとつ」という考え方を育てよう', '自分の才能を活かすための貯金という動機が合っている', 'まず自分の生活基盤を整えることが、人を支える土台になると知ること'],
+      prose: '「人を助けるためにも、まず自分をしっかり満たすことが必要」という考え方を体験させてあげることが、このお子さんの豊かさを育てるポイントです。与えることと受け取ることのバランスを、少しずつ一緒に育てていきましょう。'
+    },
+    advice: {
+      bullets: ['人を育て癒す才能はかけがえないものと伝えよう', '「自分を大切にすることが、人を大切にすることにつながる」と教えよう', '「give & give」ではなく「give & take」のバランスを一緒に体験しよう', '自分の才能を活かすための投資を親子で考えよう'],
+      prose: 'このお子さんの愛と奉仕の心は、この世界にとってとても大切な才能です。その気持ちは否定せず、大切に育ててあげてください。ただひとつ伝えてあげたいのは、「自分を満たすことが、人を満たすことに繋がる」ということ。自分を大切にする体験を通じて、より多くの人を幸せにできる存在に育っていきます。'
+    }
+  }
+};
+
+// ══════════════════════════════════════
+// ユーティリティ
+// ══════════════════════════════════════
+function calcLP(y, m, d) {
+  const s = String(y) + String(m).padStart(2,'0') + String(d).padStart(2,'0');
+  let n = s.split('').reduce((a,c) => a + +c, 0);
+  while (n > 9 && n !== 11 && n !== 22 && n !== 33)
+    n = String(n).split('').reduce((a,c) => a + +c, 0);
+  return n;
+}
+
+function toggleAcc(card) { card.classList.toggle('open'); }
+
+function restartAnim(el) {
+  el.style.animation = 'none';
+  void el.offsetHeight;
+  el.style.animation = '';
+}
+
+function fillSection(listId, proseId, section) {
+  const bullets = section.bullets || [];
+  const prose   = section.prose   || '';
+  document.getElementById(listId).innerHTML = bullets.map(t => `<li>${t}</li>`).join('');
+  const pw = document.getElementById(proseId);
+  pw.innerHTML = prose
+    ? `<hr class="ic-prose-divider"><p class="ic-prose">${prose}</p>`
+    : '';
+}
+
+// ══════════════════════════════════════
+// 診断実行
+// ══════════════════════════════════════
+let ioRef = null;
+
+function diagnose() {
+  const pY = +document.getElementById('p-year').value;
+  const pM = +document.getElementById('p-month').value;
+  const pD = +document.getElementById('p-day').value;
+  const cY = +document.getElementById('c-year').value;
+  const cM = +document.getElementById('c-month').value;
+  const cD = +document.getElementById('c-day').value;
+  const err = document.getElementById('err-msg');
+  if (!pY || !pM || !pD || !cY || !cM || !cD) { err.style.display = 'block'; return; }
+  err.style.display = 'none';
+  showResult(calcLP(pY, pM, pD), calcLP(cY, cM, cD));
+}
+
+function showResult(pNum, cNum) {
+  const pType = PARENT_TYPES[pNum];
+  const cType = CHILD_TYPES[cNum];
+  if (!pType || !cType) return;
+
+  // ── 親御さんカード ──
+  const rPNum = document.getElementById('rPNum');
+  rPNum.textContent = pNum;
+  rPNum.className = 'r-num-circle' + (pNum > 9 ? ' two-digit' : '');
+  document.getElementById('rPEmoji').textContent = pType.emoji;
+  document.getElementById('rPName').textContent  = pType.name;
+  const pMaster = document.getElementById('rPMaster');
+  pMaster.style.display = pType.master ? 'inline-block' : 'none';
+
+  // ── お子さんカード ──
+  const rCNum = document.getElementById('rCNum');
+  rCNum.textContent = cNum;
+  rCNum.className = 'r-num-circle' + (cNum > 9 ? ' two-digit' : '');
+  document.getElementById('rCEmoji').textContent = cType.emoji;
+  document.getElementById('rCName').textContent  = cType.name;
+  const cMaster = document.getElementById('rCMaster');
+  cMaster.style.display = cType.master ? 'inline-block' : 'none';
+
+  // ── ボディヘッダー ──
+  document.getElementById('rBodyNames').innerHTML =
+    `親御さん：${pType.name}（${pNum}）<span class="sep">×</span>お子さん：${cType.name}（${cNum}）`;
+
+  // ── アコーディオン内容 ──
+  fillSection('lParent',     'pParent',     pType.personality);
+  fillSection('lChild',      'pChild',      cType.personality);
+  fillSection('lChildSpend', 'pChildSpend', cType.spending);
+  fillSection('lChildSave',  'pChildSave',  cType.saving);
+  fillSection('lAdvice',     'pAdvice',     cType.advice);
+
+  // ── 画面切替 ──
+  document.getElementById('screen-input').classList.remove('active');
+  document.getElementById('screen-result').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'auto' });
+
+  // ── アニメ再起動 ──
+  ['rPPre','rPEmoji','rPName','rPMaster','rPNumWrap','rDuoX',
+   'rCPre','rCEmoji','rCName','rCMaster','rCNumWrap','rHint']
+    .map(id => document.getElementById(id)).forEach(restartAnim);
+
+  // ── アニメ適用（親 → × → 子 の順に） ──
+  document.getElementById('rPPre').style.animation     = 'fadeDown 0.5s ease 0.2s forwards';
+  document.getElementById('rPEmoji').style.animation   = 'boomIn 0.75s cubic-bezier(0.34,1.56,0.64,1) 0.55s forwards';
+  document.getElementById('rPName').style.animation    = 'boomIn 0.65s cubic-bezier(0.34,1.56,0.64,1) 1.2s forwards';
+  document.getElementById('rPNumWrap').style.animation = 'fadeUp 0.45s ease 1.7s forwards';
+  document.getElementById('rDuoX').style.animation     = 'fadeUp 0.4s ease 1.65s forwards';
+
+  if (pType.master) {
+    document.getElementById('rPMaster').style.animation = 'fadeUp 0.35s ease 1.65s forwards';
+  }
+
+  document.getElementById('rCPre').style.animation     = 'fadeDown 0.5s ease 2.0s forwards';
+  document.getElementById('rCEmoji').style.animation   = 'boomIn 0.75s cubic-bezier(0.34,1.56,0.64,1) 2.35s forwards';
+  document.getElementById('rCName').style.animation    = 'boomIn 0.65s cubic-bezier(0.34,1.56,0.64,1) 3.0s forwards';
+  document.getElementById('rCNumWrap').style.animation = 'fadeUp 0.45s ease 3.45s forwards';
+  document.getElementById('rHint').style.animation     = 'hintPulse 2.2s ease-in-out 3.7s infinite';
+
+  if (cType.master) {
+    document.getElementById('rCMaster').style.animation = 'fadeUp 0.35s ease 3.4s forwards';
+  }
+
+  // ── アコーディオン初期状態 ──
+  document.querySelectorAll('.ic').forEach(c => c.classList.remove('open'));
+  document.getElementById('cParent').classList.add('open');
+
+  // ── カード reveal ──
+  document.querySelectorAll('.rv').forEach(el => el.classList.remove('in'));
+  if (ioRef) ioRef.disconnect();
+  setTimeout(() => {
+    ioRef = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); ioRef.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.rv').forEach(el => ioRef.observe(el));
+  }, 80);
+}
+
+function retry() {
+  if (ioRef) { ioRef.disconnect(); ioRef = null; }
+  document.getElementById('screen-result').classList.remove('active');
+  document.getElementById('screen-input').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
