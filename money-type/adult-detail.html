@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>あなたのお金タイプ診断（詳細版）| Supple Education Labo</title>
+  <title>あなたのお金タイプ診断 | Supple Education Labo</title>
   <style>
     :root {
       --green:       #3B6D11;
@@ -200,6 +200,27 @@
     .btn-go:active { transform: scale(0.98); }
 
     .privacy { text-align: center; font-size: 0.72rem; color: var(--text-light); margin-top: 12px; }
+
+    .i-desc {
+      margin: 20px 0 22px;
+      padding: 18px 20px;
+      background: var(--green-pale);
+      border-radius: var(--r-sm);
+      border-left: 3px solid var(--green-muted);
+    }
+    .i-desc-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+    .i-desc-body {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      line-height: 2.0;
+    }
+    .i-desc-body p { margin-bottom: 10px; }
+    .i-desc-body p:last-child { margin-bottom: 0; }
 
     /* ════════════════════════════════════
        RESULT SCREEN
@@ -531,7 +552,7 @@
   <div class="i-hero">
     <p class="brand-tag">Supple Education Labo</p>
     <span class="i-hero-emoji">💰</span>
-    <h1 class="i-hero-title">あなたのお金タイプ診断<br><small>（詳細版）</small></h1>
+    <h1 class="i-hero-title">あなたのお金タイプ診断</h1>
     <span class="i-hero-catch">✨ お金は楽しい未来を叶えるもの</span>
   </div>
 
@@ -554,6 +575,15 @@
         <span class="unit">日</span>
       </div>
       <p class="err-msg" id="err-msg">生年月日を正しく選択してください</p>
+
+      <div class="i-desc">
+        <p class="i-desc-title">✨ 数秘術で診断するお金のタイプ診断</p>
+        <div class="i-desc-body">
+          <p>数秘術とは、生年月日の数字が持つ意味やエネルギーをもとにその人の性格や才能を読み解く、古くから伝わる知恵です。</p>
+          <p>生年月日を入力するだけで、あなたの性格タイプとお金との関係性、自分に合ったお金の管理方法がわかります。</p>
+          <p>ぜひトライしてみてください！</p>
+        </div>
+      </div>
 
       <button class="btn-go" onclick="diagnose()">✨ 診断する</button>
       <p class="privacy">※ 入力された情報は外部に送信・保存されません</p>
