@@ -968,8 +968,13 @@ function diagnose() {
   const err = document.getElementById('err-msg');
   if (!y || !m || !d) { err.style.display = 'block'; return; }
   err.style.display = 'none';
+  showType(calcLP(y, m, d));
+}
 
-  const num  = calcLP(y, m, d);
+// ══════════════════════════════════════
+// タイプ表示（診断・URLパラメータ共通）
+// ══════════════════════════════════════
+function showType(num) {
   const type = TYPES[num];
   if (!type) return;
 
@@ -1051,6 +1056,17 @@ function diagnose() {
     document.querySelectorAll('.rv').forEach(el => ioRef.observe(el));
   }, 80);
 }
+
+// ══════════════════════════════════════
+// URLパラメータ ?type=N で直接表示
+// ══════════════════════════════════════
+(function () {
+  const param = new URLSearchParams(window.location.search).get('type');
+  if (param !== null) {
+    const num = +param;
+    if (TYPES[num]) showType(num);
+  }
+})();
 
 // ══════════════════════════════════════
 // もう一度診断
