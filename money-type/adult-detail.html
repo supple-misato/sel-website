@@ -479,39 +479,6 @@
     .ic.adv .ic-prose-divider    { border-top-color: #e8b8cb; }
 
     /* CTA */
-    .cta-card {
-      background: #fff;
-      border-radius: var(--r);
-      box-shadow: var(--shadow);
-      padding: 32px 24px;
-      text-align: center;
-      margin-bottom: 8px;
-    }
-    .cta-deco  { font-size: 2rem; display: block; margin-bottom: 12px; }
-    .cta-title { font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-    .cta-text  {
-      font-size: 0.84rem;
-      color: var(--text-sub);
-      line-height: 1.8;
-      margin-bottom: 22px;
-    }
-
-    .btn-line {
-      display: inline-block;
-      background: var(--pink);
-      color: #fff;
-      padding: 15px 40px;
-      border-radius: 30px;
-      font-size: 0.98rem;
-      font-weight: 700;
-      text-decoration: none;
-      letter-spacing: 0.05em;
-      box-shadow: 0 4px 18px rgba(212,83,126,0.35);
-      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
-    }
-    .btn-line:hover  { background: var(--pink-dark); box-shadow: 0 6px 24px rgba(212,83,126,0.42); }
-    .btn-line:active { transform: scale(0.97); }
-
     .btn-retry {
       display: block;
       text-align: center;
@@ -649,17 +616,7 @@
         <div class="ic-body"><ul id="lAdvice"></ul><div class="ic-prose-wrap" id="pAdvice"></div></div>
       </div>
 
-      <div class="rv" id="cCta">
-        <div class="cta-card">
-          <span class="cta-deco">💚</span>
-          <p class="cta-title">もっと詳しく知りたい方へ</p>
-          <p class="cta-text">
-            あなたのお金タイプをもとに<br>
-            具体的なアドバイスをお伝えします。<br>
-            まずはお気軽にご相談ください。
-          </p>
-          <a href="#" class="btn-line">💬 LINEでご相談する</a>
-        </div>
+      <div id="cCta">
         <button class="btn-retry" onclick="retry()">← もう一度診断する</button>
       </div>
 
