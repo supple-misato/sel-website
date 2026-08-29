@@ -338,8 +338,12 @@
     }
     .btn-retry:hover  { background: var(--green-pale); }
     .btn-retry:active { transform: scale(0.98); }
-    /* 共有リンク（QR）経由でアクセスした場合は「もう一度診断する」を隠す ＝ 閲覧専用 */
-    .shared-view .btn-retry { display: none; }
+    /* 共有リンク（QR）経由でアクセスした場合はアクション系ボタンをすべて隠す ＝ 閲覧専用 */
+    /* 共有リンク（QR）経由でアクセスした場合はアクション系ボタンをすべて隠す ＝ 閲覧専用 */
+    .shared-view .btn-retry,
+    .shared-view .btn-pdf,
+    .shared-view .btn-share { display: none; }
+    .shared-view .btn-retry-wrap { padding-bottom: 0; margin-bottom: 0; }
     .btn-pdf {
       width: 100%;
       padding: 15px;
