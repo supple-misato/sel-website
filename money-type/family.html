@@ -338,6 +338,77 @@
     }
     .btn-retry:hover  { background: var(--green-pale); }
     .btn-retry:active { transform: scale(0.98); }
+    .btn-pdf {
+      width: 100%;
+      padding: 15px;
+      border-radius: 30px;
+      border: none;
+      background: var(--green);
+      color: #fff;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      margin-bottom: 12px;
+    }
+    .btn-pdf:hover  { background: var(--green-mid); }
+    .btn-pdf:active { transform: scale(0.98); }
+    .btn-share {
+      width: 100%;
+      padding: 15px;
+      border-radius: 30px;
+      border: 1.5px solid var(--green);
+      background: #fff;
+      color: var(--green);
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 12px;
+    }
+    .btn-share:hover  { background: var(--green-pale); }
+    .btn-share:active { transform: scale(0.98); }
+
+    /* ── SHARE MODAL ── */
+    .share-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(20,20,20,0.55);
+      z-index: 100;
+      align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .share-overlay.open { display: flex; }
+    .share-card {
+      background: #fff;
+      border-radius: var(--r);
+      padding: 28px 24px 24px;
+      max-width: 340px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      box-shadow: var(--shadow-lg);
+    }
+    .share-close {
+      position: absolute; top: 14px; right: 14px;
+      border: none; background: none; font-size: 1.1rem;
+      color: var(--text-light); cursor: pointer; padding: 4px;
+    }
+    .share-title { font-size: 1rem; font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    .share-sub { font-size: 0.8rem; color: var(--text-sub); line-height: 1.6; margin-bottom: 18px; }
+    .qr-holder { display: flex; justify-content: center; margin-bottom: 16px; min-height: 176px; align-items: center; }
+    .qr-holder img, .qr-holder canvas { border-radius: 8px; border: 1px solid var(--border); }
+    .share-url-row { display: flex; gap: 6px; margin-bottom: 10px; }
+    .share-url {
+      flex: 1; font-size: 0.72rem; color: var(--text-sub);
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 8px 10px; background: var(--cream);
+    }
+    .share-copy {
+      border: none; border-radius: 8px; background: var(--green);
+      color: #fff; font-size: 0.75rem; font-weight: 700;
+      padding: 0 14px; cursor: pointer;
+    }
+    .share-note { font-size: 0.7rem; color: var(--text-light); line-height: 1.6; }
     .footer { text-align: center; font-size: 0.7rem; color: var(--text-light); padding: 20px 16px; }
 
     @media (max-width: 440px) {
@@ -351,9 +422,26 @@
       .ic-head { padding: 14px 15px; min-height: 50px; }
       .ic.open .ic-body { padding: 14px 15px; }
     }
+    /* ── PRINT / PDF ── */
+    @media print {
+      @page { margin: 14mm 12mm; }
+      body { background: #fff; }
+      .footer, .r-scroll-hint, .ic-chevron, .btn-retry-wrap, .share-overlay { display: none !important; }
+      .i-hero, .i-body, .i-wave { display: none !important; }
+      .r-hero { padding-top: 8px; }
+      .r-duo-card, .ic { box-shadow: none !important; border: 1px solid var(--border); }
+      .ic { break-inside: avoid; page-break-inside: avoid; }
+      .ic-body {
+        max-height: none !important;
+        padding: 18px 20px !important;
+        overflow: visible !important;
+      }
+      .ic.adv .ic-body { padding: 18px 20px !important; }
+    }
   </style>
 </head>
 <body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <!-- ══════════ INPUT SCREEN ══════════ -->
 <div id="screen-input" class="screen active">
@@ -502,11 +590,28 @@
     </div>
 
     <div class="btn-retry-wrap">
+      <button class="btn-pdf" onclick="window.print()">🖨️ PDFで保存する</button>
+      <button class="btn-share" onclick="openShare()">📱 結果をスマホで見る（QR）</button>
       <button class="btn-retry" onclick="retry()">↩ もう一度診断する</button>
     </div>
   </div>
 
   <footer class="footer">© 2026 Supple Education Labo（株式会社SEL）</footer>
+</div>
+
+<!-- ══════════ SHARE MODAL ══════════ -->
+<div id="shareModal" class="share-overlay" onclick="if(event.target===this) closeShare()">
+  <div class="share-card">
+    <button class="share-close" onclick="closeShare()">✕</button>
+    <p class="share-title">📱 結果をQRコードで共有</p>
+    <p class="share-sub">スマホのカメラで読み取ると<br>この診断結果だけをすぐに開けます</p>
+    <div id="qrHolder" class="qr-holder"></div>
+    <div class="share-url-row">
+      <input type="text" id="shareUrl" class="share-url" readonly>
+      <button class="share-copy" onclick="copyShareUrl()">コピー</button>
+    </div>
+    <p class="share-note" id="shareNote"></p>
+  </div>
 </div>
 
 
@@ -964,13 +1069,75 @@ function showResult(pNum, cNum) {
     }, { threshold: 0.1 });
     document.querySelectorAll('.rv').forEach(el => ioRef.observe(el));
   }, 80);
+
+  // ── 共有用に結果を記憶＆URLを更新 ──
+  lastPNum = pNum;
+  lastCNum = cNum;
+  const shareUrl = buildShareUrl(pNum, cNum);
+  if (window.history && history.replaceState) {
+    history.replaceState(null, '', shareUrl);
+  }
 }
+
+let lastPNum = null;
+let lastCNum = null;
+
+function buildShareUrl(pNum, cNum) {
+  const base = location.href.split('?')[0].split('#')[0];
+  return `${base}?p=${pNum}&c=${cNum}`;
+}
+
+function openShare() {
+  if (lastPNum === null || lastCNum === null) return;
+  const url = buildShareUrl(lastPNum, lastCNum);
+  document.getElementById('shareUrl').value = url;
+
+  const holder = document.getElementById('qrHolder');
+  holder.innerHTML = '';
+  const note = document.getElementById('shareNote');
+
+  if (location.protocol === 'file:') {
+    note.textContent = 'このファイルをWeb上（GitHub Pagesなど）に公開すると、スマホのカメラでこのQRコードを読み取って結果を直接開けるようになります。';
+  } else if (typeof QRCode === 'undefined') {
+    note.textContent = 'QRコードの読み込みに失敗しました。上のURLをコピーして共有してください。';
+  } else {
+    new QRCode(holder, { text: url, width: 168, height: 168, correctLevel: QRCode.CorrectLevel.M });
+    note.textContent = 'このQRコードを読み取ると、この診断結果画面だけが直接開きます。';
+  }
+
+  document.getElementById('shareModal').classList.add('open');
+}
+
+function closeShare() {
+  document.getElementById('shareModal').classList.remove('open');
+}
+
+function copyShareUrl() {
+  const input = document.getElementById('shareUrl');
+  input.select();
+  input.setSelectionRange(0, 99999);
+  navigator.clipboard?.writeText(input.value).catch(() => document.execCommand('copy'));
+}
+
+// ── URLパラメータから直接結果を表示（QR共有からのアクセス） ──
+(function initFromUrl() {
+  const params = new URLSearchParams(location.search);
+  const pNum = +params.get('p');
+  const cNum = +params.get('c');
+  const validNums = [1,2,3,4,5,6,7,8,9,11,22,33];
+  if (validNums.includes(pNum) && validNums.includes(cNum)) {
+    document.addEventListener('DOMContentLoaded', () => showResult(pNum, cNum));
+  }
+})();
 
 function retry() {
   if (ioRef) { ioRef.disconnect(); ioRef = null; }
   document.getElementById('screen-result').classList.remove('active');
   document.getElementById('screen-input').classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (window.history && history.replaceState) {
+    history.replaceState(null, '', location.href.split('?')[0].split('#')[0]);
+  }
 }
 </script>
 
