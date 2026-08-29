@@ -338,6 +338,8 @@
     }
     .btn-retry:hover  { background: var(--green-pale); }
     .btn-retry:active { transform: scale(0.98); }
+    /* 共有リンク（QR）経由でアクセスした場合は「もう一度診断する」を隠す ＝ 閲覧専用 */
+    .shared-view .btn-retry { display: none; }
     .btn-pdf {
       width: 100%;
       padding: 15px;
@@ -1126,7 +1128,10 @@ function copyShareUrl() {
   const cNum = +params.get('c');
   const validNums = [1,2,3,4,5,6,7,8,9,11,22,33];
   if (validNums.includes(pNum) && validNums.includes(cNum)) {
-    document.addEventListener('DOMContentLoaded', () => showResult(pNum, cNum));
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.add('shared-view'); // 共有リンク経由＝閲覧専用モード
+      showResult(pNum, cNum);
+    });
   }
 })();
 
